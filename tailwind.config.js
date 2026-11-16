@@ -35,6 +35,14 @@ export default {
           ink: token('accent-ink'),
         },
         progress: token('progress'),
+        // 学習カレンダーの色の濃さ（0〜4）
+        heat: {
+          0: token('heat-0'),
+          1: token('heat-1'),
+          2: token('heat-2'),
+          3: token('heat-3'),
+          4: token('heat-4'),
+        },
         // 状態の色はアクセント色とは別に定義する
         status: {
           gray: statusColor('gray'),
