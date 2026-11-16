@@ -1,18 +1,26 @@
 import { useLiveQuery } from 'dexie-react-hooks';
+import { Plus } from 'lucide-react';
+import { useState } from 'react';
 
+import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { logRepository } from '@/db/repositories';
+import { LogFormModal } from '@/features/logs/LogFormModal';
+import { LOG_SOURCE_LABELS } from '@/features/logs/LogList';
 import { formatDateWithWeekday, formatHours, formatMinutes } from '@/lib/format';
-import type { StudyLogSource, Week } from '@/types';
+import type { Week } from '@/types';
 
-const SOURCE_LABELS: Record<StudyLogSource, string> = {
-  timer: 'タイマー',
-  manual: '手動',
+type WeekLogsProps = {
+  week: Week;
+  /** ログを追加するダイアログで、週を選ぶ欄に出す週の一覧 */
+  weeks: readonly Week[];
+  today: string;
 };
 
 /** この週の学習ログの一覧と、合計時間・予定時間との比較 */
-export function WeekLogs({ week }: { week: Week }) {
+export function WeekLogs({ week, weeks, today }: WeekLogsProps) {
+  const [formOpen, setFormOpen] = useState(false);
   const logs = useLiveQuery(() => logRepository.getByWeek(week.id), [week.id]);
 
   if (!logs) return null;
@@ -22,7 +30,15 @@ export function WeekLogs({ week }: { week: Week }) {
   const percent = plannedMinutes > 0 ? (totalMinutes / plannedMinutes) * 100 : 0;
 
   return (
-    <Card title="学習ログ">
+    <Card
+      title="学習ログ"
+      action={
+        <Button size="sm" onClick={() => setFormOpen(true)}>
+          <Plus aria-hidden className="size-3.5" />
+          ログを追加
+        </Button>
+      }
+    >
       <p className="text-sm leading-none">
         <span className="text-lg font-bold">{formatMinutes(totalMinutes)}</span>
         <span className="text-muted"> / 予定 {formatHours(week.plannedHours)}</span>
@@ -31,7 +47,7 @@ export function WeekLogs({ week }: { week: Week }) {
 
       {logs.length === 0 ? (
         <p className="mt-4 text-sm leading-relaxed text-muted">
-          この週の学習ログはまだありません。
+          この週の学習ログはまだありません。右下のタイマーで計測するか、「ログを追加」から記録できます。
         </p>
       ) : (
         <ul className="mt-3 divide-y divide-line">
@@ -40,7 +56,7 @@ export function WeekLogs({ week }: { week: Week }) {
               <div className="flex items-baseline justify-between gap-3 text-sm">
                 <span>
                   {formatDateWithWeekday(log.date)}
-                  <span className="ml-2 text-xs text-muted">{SOURCE_LABELS[log.source]}</span>
+                  <span className="ml-2 text-xs text-muted">{LOG_SOURCE_LABELS[log.source]}</span>
                 </span>
                 <span className="shrink-0 font-bold">{formatMinutes(log.minutes)}</span>
               </div>
@@ -51,6 +67,14 @@ export function WeekLogs({ week }: { week: Week }) {
           ))}
         </ul>
       )}
+
+      <LogFormModal
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        weeks={weeks}
+        today={today}
+        defaultWeekId={week.id}
+      />
     </Card>
   );
 }

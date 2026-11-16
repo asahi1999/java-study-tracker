@@ -61,6 +61,39 @@ export function createWeekDatesSchema({ today, isDone }: { today: string; isDone
     });
 }
 
+export const LOG_CONTENT_MAX_LENGTH = 500;
+
+/**
+ * 学習ログの入力チェック。
+ * 学習時間は入力欄の文字列のまま受け取り、整数の分に直す
+ */
+export function createLogInputSchema({ today }: { today: string }) {
+  return z.object({
+    date: z
+      .string()
+      .refine((value) => isDateString(value), { error: '日付を入力してください' })
+      .refine((value) => !isDateString(value) || value <= today, {
+        error: '今日より先の日付は入力できません',
+      }),
+    minutes: z
+      .string()
+      .trim()
+      .refine((value) => /^\d+$/.test(value), { error: '学習時間を分単位の整数で入力してください' })
+      .transform(Number)
+      .refine((value) => value >= 1 && value <= 1440, {
+        error: '学習時間は1〜1440分で入力してください',
+      }),
+    /** 空文字は「週の指定なし」 */
+    weekId: z.string().transform((value) => (value === '' ? null : value)),
+    content: z
+      .string()
+      .trim()
+      .max(LOG_CONTENT_MAX_LENGTH, {
+        error: `やったことは${LOG_CONTENT_MAX_LENGTH}文字以内で入力してください`,
+      }),
+  });
+}
+
 /** 入力チェックの結果から、項目ごとの最初のエラーメッセージを取り出す */
 export function getFieldErrors(error: z.ZodError): Record<string, string> {
   const errors: Record<string, string> = {};

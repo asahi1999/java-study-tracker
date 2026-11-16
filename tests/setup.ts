@@ -7,6 +7,7 @@ import { cleanup, configure } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 
 import { db } from '@/db/database';
+import { useTimerStore } from '@/stores/timerStore';
 
 import { installMatchMedia, resetMatchMedia } from './matchMedia';
 
@@ -41,6 +42,9 @@ afterEach(() => {
   // 日付や時間を固定したテストの設定を、次のテストに持ち越さない
   vi.useRealTimers();
   resetMatchMedia();
+  // 学習タイマーはアプリ全体で1つなので、次のテストに計測中の状態を持ち越さない
+  useTimerStore.getState().reset();
+  document.title = '';
   localStorage.clear();
   // テーマのテストが <html> に付けた状態を次のテストに持ち越さない
   document.documentElement.classList.remove('dark');

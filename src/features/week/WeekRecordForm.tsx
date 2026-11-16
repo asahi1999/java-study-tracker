@@ -3,16 +3,12 @@ import { type FormEvent, useId, useState } from 'react';
 
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { ERROR_CLASS, INPUT_CLASS, LABEL_CLASS } from '@/components/ui/field';
 import { weekRepository } from '@/db/repositories';
 import { createWeekDatesSchema, getFieldErrors, repoUrlSchema } from '@/lib/validation';
 import type { Week } from '@/types';
 
 type DateField = 'startedAt' | 'completedAt';
-
-const INPUT_CLASS =
-  'mt-1 block h-10 w-full rounded border-[1.5px] border-line bg-surface px-3 text-[15px] text-ink placeholder:text-muted/70 aria-[invalid=true]:border-status-red';
-const LABEL_CLASS = 'block text-[13px] font-bold';
-const ERROR_CLASS = 'mt-1 text-[13px] leading-relaxed text-status-red-fg';
 
 type WeekRecordFormProps = {
   week: Week;

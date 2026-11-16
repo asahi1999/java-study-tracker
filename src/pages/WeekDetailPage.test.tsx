@@ -406,7 +406,29 @@ describe('WeekDetailPage', () => {
       const card = await screen.findByRole('region', { name: '学習ログ' });
 
       expect(card).toHaveTextContent('0分 / 予定 9時間');
-      expect(within(card).getByText('この週の学習ログはまだありません。')).toBeInTheDocument();
+      expect(card).toHaveTextContent('この週の学習ログはまだありません。');
+    });
+
+    it('「ログを追加」から、この週のログを追加できる', async () => {
+      renderPage();
+      const card = await screen.findByRole('region', { name: '学習ログ' });
+
+      await userEvent.click(within(card).getByRole('button', { name: 'ログを追加' }));
+      const dialog = screen.getByRole('dialog', { name: '学習ログを追加' });
+      // 週の初期値は、開いている週
+      expect(within(dialog).getByRole('combobox', { name: '週' })).toHaveValue('week-01');
+
+      await userEvent.type(within(dialog).getByLabelText('学習時間（分）'), '40');
+      await userEvent.click(within(dialog).getByRole('button', { name: 'ログを追加' }));
+
+      await waitFor(() => expect(card).toHaveTextContent('40分 / 予定 9時間'));
+      expect((await db.logs.toArray())[0]).toMatchObject({
+        weekId: 'week-01',
+        minutes: 40,
+        source: 'manual',
+      });
+      // ログを足したので、未着手だった週が「進行中」になる
+      expect((await getWeek())?.status).toBe('in_progress');
     });
 
     it('この週のログを新しい順に並べ、合計時間を予定時間と比べる', async () => {

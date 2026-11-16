@@ -13,6 +13,11 @@ export function formatWeekRange({ weekStart, weekEnd }: WeekRange): string {
   return weekStart === weekEnd ? `${weekStart}週目` : `${weekStart}〜${weekEnd}週目`;
 }
 
+/** 週を選ぶ一覧などで使う「1週目 数当てゲーム」のような表示 */
+export function formatWeekLabel(week: WeekRange & Pick<Week, 'title'>): string {
+  return `${formatWeekRange(week)} ${week.title}`;
+}
+
 /** 路線バーなど狭い場所で使う短い表記（例：「1」「5–6」） */
 export function formatWeekRangeShort({ weekStart, weekEnd }: WeekRange): string {
   return weekStart === weekEnd ? `${weekStart}` : `${weekStart}–${weekEnd}`;

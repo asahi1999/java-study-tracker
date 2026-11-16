@@ -4,6 +4,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { BottomNav } from './BottomNav';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
+import { TimerWidget } from './TimerWidget';
 
 // 全画面で共通の枠。PCは左にサイドバー、スマホは下部にタブを置き、その中にページを表示する
 export function AppLayout() {
@@ -36,12 +37,14 @@ export function AppLayout() {
         <main
           ref={mainRef}
           tabIndex={-1}
-          className="mx-auto w-full max-w-5xl flex-1 px-4 pb-24 pt-5 outline-none md:px-8 md:pb-10 md:pt-7"
+          // 下の余白は、下部タブと右下のタイマーに本文の最後が隠れないよう広めに取っている
+          className="mx-auto w-full max-w-5xl flex-1 px-4 pb-36 pt-5 outline-none md:px-8 md:pb-24 md:pt-7"
         >
           <Outlet />
         </main>
       </div>
 
+      <TimerWidget />
       <BottomNav />
     </div>
   );

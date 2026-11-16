@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  formatWeekLabel,
   formatWeekRange,
   formatWeekRangeShort,
   normalizeWeekSpan,
@@ -53,5 +54,19 @@ describe('WEEK_STATUS_LABELS', () => {
       in_progress: '進行中',
       done: '完成',
     });
+  });
+});
+
+describe('formatWeekLabel', () => {
+  it('週番号と作るものを並べる', () => {
+    expect(formatWeekLabel({ weekStart: 1, weekEnd: 1, title: '数当てゲーム' })).toBe(
+      '1週目 数当てゲーム',
+    );
+  });
+
+  it('複数週にまたがる週は、範囲で表示する', () => {
+    expect(formatWeekLabel({ weekStart: 5, weekEnd: 6, title: '単語帳アプリ' })).toBe(
+      '5〜6週目 単語帳アプリ',
+    );
   });
 });

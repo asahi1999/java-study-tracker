@@ -1,14 +1,14 @@
 import { db } from '@/db/database';
-import { logRepository, skillRepository, weekRepository } from '@/db/repositories';
+import { skillRepository, weekRepository } from '@/db/repositories';
 import { todayString } from '@/lib/date';
 import {
   canCompleteWeek,
-  getAutoStartChanges,
   getCompleteChanges,
   getReopenChanges,
   isChecklistLocked,
 } from '@/lib/weekStatus';
 
+import { startWeekIfTouched } from './autoStart';
 import { ChecklistLockedError, WeekNotCompletableError } from './errors';
 
 // 複数のテーブルにまたがる「手順」をまとめる層。
@@ -34,13 +34,7 @@ export const weekService = {
       if (isChecklistLocked(week)) throw new ChecklistLockedError();
 
       await skillRepository.setChecked(skillId, checked, today);
-
-      const [skills, logs] = await Promise.all([
-        skillRepository.getByWeek(week.id),
-        logRepository.getByWeek(week.id),
-      ]);
-      const changes = getAutoStartChanges(week, skills, logs, today);
-      if (changes) await weekRepository.update(week.id, changes);
+      await startWeekIfTouched(week.id, today);
     });
   },
 

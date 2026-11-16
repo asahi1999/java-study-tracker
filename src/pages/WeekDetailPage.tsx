@@ -84,7 +84,7 @@ export function WeekDetailPage() {
         </div>
         <div className="grid gap-4">
           <WeekRecordForm key={week.id} week={week} today={today} />
-          <WeekLogs week={week} />
+          <WeekLogs week={week} weeks={data.weeks} today={today} />
         </div>
       </div>
     </>
