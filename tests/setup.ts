@@ -3,14 +3,18 @@
 import 'fake-indexeddb/auto';
 import '@testing-library/jest-dom/vitest';
 
-import { cleanup } from '@testing-library/react';
-import { afterEach, beforeEach } from 'vitest';
+import { cleanup, configure } from '@testing-library/react';
+import { afterEach, beforeEach, vi } from 'vitest';
 
 import { db } from '@/db/database';
 
 import { installMatchMedia, resetMatchMedia } from './matchMedia';
 
 installMatchMedia();
+
+// 画面の更新を待つ時間の上限。標準の1秒だと、テストを並列で動かして負荷が高いときに
+// データベースの読み込みが間に合わず、たまに失敗することがあるため長めにしている
+configure({ asyncUtilTimeout: 5000 });
 
 // jsdom は window.scrollTo を実装しておらず、呼ぶとコンソールにエラーが出るので空の関数にする
 window.scrollTo = () => {};
@@ -34,6 +38,8 @@ beforeEach(async () => {
 
 afterEach(() => {
   cleanup();
+  // 日付や時間を固定したテストの設定を、次のテストに持ち越さない
+  vi.useRealTimers();
   resetMatchMedia();
   localStorage.clear();
   // テーマのテストが <html> に付けた状態を次のテストに持ち越さない

@@ -28,6 +28,7 @@ export default {
           ink: token('board-ink'),
           muted: token('board-muted'),
           line: token('board-line'),
+          alert: token('board-alert'),
         },
         accent: {
           DEFAULT: token('accent'),

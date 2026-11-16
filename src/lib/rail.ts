@@ -1,5 +1,9 @@
 import type { Week } from '@/types';
 
+import { diffInDays } from './date';
+import { isDateInRange, type PlannedRange } from './schedule';
+import { normalizeWeekSpan } from './week';
+
 /** 路線バーに置く週1つぶんの位置 */
 export type RailSegment = {
   week: Week;
@@ -33,8 +37,7 @@ export function layoutRail(weeks: readonly Week[]): RailLayout {
   const laneEnds: number[] = [];
 
   const segments = sorted.map((week) => {
-    const start = Math.max(1, Math.floor(week.weekStart));
-    const end = Math.max(start, Math.floor(week.weekEnd));
+    const { start, end } = normalizeWeekSpan(week);
 
     // 空いている一番上の段に置く。どの段も埋まっていれば新しい段を作る
     let lane = laneEnds.findIndex((laneEnd) => laneEnd < start);
@@ -49,4 +52,34 @@ export function layoutRail(weeks: readonly Week[]): RailLayout {
     columns: Math.max(0, ...laneEnds),
     lanes: laneEnds.length,
   };
+}
+
+/**
+ * 「今日」の印を置く位置を、路線バーの左端を0・右端を1とした割合で返す。
+ * 今日が予定期間に入っている週の中を、日がたつにつれて左から右へ進む。
+ * 現在の週がなければ（開始前・終了後・週と週の間の休止中）null を返す
+ */
+export function getTodayPosition(
+  layout: RailLayout,
+  ranges: ReadonlyMap<string, PlannedRange>,
+  today: string,
+): number | null {
+  // 期間が重なる週があるときは、本線（0段目）にある週を基準にする
+  const current = layout.segments
+    .filter(({ week }) => {
+      const range = ranges.get(week.id);
+      return range !== undefined && isDateInRange(today, range);
+    })
+    .sort((a, b) => a.lane - b.lane)[0];
+  if (!current || layout.columns === 0) return null;
+
+  const range = ranges.get(current.week.id);
+  if (!range) return null;
+
+  const totalDays = diffInDays(range.end, range.start) + 1;
+  // その日の真ん中に印を置く。初日が左端に張りつかないようにするため
+  const elapsedDays = diffInDays(today, range.start) + 0.5;
+  const column = current.start - 1 + (elapsedDays / totalDays) * current.span;
+
+  return column / layout.columns;
 }

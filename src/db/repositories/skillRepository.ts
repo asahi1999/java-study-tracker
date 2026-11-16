@@ -7,6 +7,10 @@ export const skillRepository = {
     return db.skills.toArray();
   },
 
+  getById(id: string): Promise<Skill | undefined> {
+    return db.skills.get(id);
+  },
+
   /** 指定した週のチェック項目を表示順に取得する */
   getByWeek(weekId: string): Promise<Skill[]> {
     return db.skills.where('weekId').equals(weekId).sortBy('order');

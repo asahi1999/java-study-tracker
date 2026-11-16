@@ -1,7 +1,7 @@
 import type { BreakPeriod, Settings, Week, WeekStatus } from '@/types';
 
 import { addDaysToDate, diffInDays, isDateString } from './date';
-import { normalizeWeekSpan } from './week';
+import { normalizeWeekSpan, WEEK_STATUS_LABELS } from './week';
 
 /** 予定期間（開始日と終了日を含む） */
 export type PlannedRange = {
@@ -132,6 +132,11 @@ export function isWeekLate(
 
 /** 画面に出す状態。「遅れ」は保存せず、予定終了日と今日からその都度求める */
 export type WeekDisplayStatus = WeekStatus | 'late';
+
+export const WEEK_DISPLAY_STATUS_LABELS: Record<WeekDisplayStatus, string> = {
+  ...WEEK_STATUS_LABELS,
+  late: '遅れ',
+};
 
 export function getDisplayStatus(
   week: Pick<Week, 'status'>,

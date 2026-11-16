@@ -22,6 +22,13 @@ describe('skillRepository', () => {
     expect(await skillRepository.getByWeek('none')).toEqual([]);
   });
 
+  it('getById はIDが一致する項目を返し、なければ undefined を返す', async () => {
+    await db.skills.add(buildSkill({ id: 's1', label: '変数' }));
+
+    expect(await skillRepository.getById('s1')).toEqual(buildSkill({ id: 's1', label: '変数' }));
+    expect(await skillRepository.getById('none')).toBeUndefined();
+  });
+
   it('getAll はすべての週の項目を返す', async () => {
     await db.skills.bulkAdd([
       buildSkill({ id: 's1', weekId: 'w1' }),

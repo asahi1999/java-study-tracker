@@ -46,6 +46,8 @@
     --board-ink: 255 255 255;
     --board-muted: 169 184 216;
     --board-line: 42 60 102;
+    /* 板はライトでもダークでも濃紺なので、板の上の「遅れ」の赤は1つの値で足りる */
+    --board-alert: 214 63 56;
 
     --accent: 255 196 0;
     --accent-ink: 15 33 71;
@@ -125,5 +127,86 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+}
+
+@layer components {
+  /* メモのプレビュー（Markdown を変換したHTML）の見た目。中のタグにはクラスを付けられないので、ここでまとめて指定する */
+  .markdown {
+    @apply text-[15px] leading-relaxed;
+  }
+  .markdown > :first-child {
+    @apply mt-0;
+  }
+  .markdown > :last-child {
+    @apply mb-0;
+  }
+  .markdown h1,
+  .markdown h2,
+  .markdown h3,
+  .markdown h4 {
+    @apply mb-2 mt-5 font-bold leading-snug;
+  }
+  .markdown h1 {
+    @apply text-xl;
+  }
+  .markdown h2 {
+    @apply text-lg;
+  }
+  .markdown h3,
+  .markdown h4 {
+    @apply text-base;
+  }
+  .markdown p,
+  .markdown ul,
+  .markdown ol,
+  .markdown pre,
+  .markdown blockquote,
+  .markdown table {
+    @apply my-3;
+  }
+  .markdown ul {
+    @apply list-disc pl-6;
+  }
+  .markdown ol {
+    @apply list-decimal pl-6;
+  }
+  .markdown li {
+    @apply my-1;
+  }
+  /* チェックボックスつきのリスト（- [ ] 形式）は行頭の記号を消す */
+  .markdown li:has(> input[type='checkbox']) {
+    @apply -ml-6 list-none;
+  }
+  .markdown li > input[type='checkbox'] {
+    @apply mr-2 accent-ink;
+  }
+  .markdown a {
+    @apply font-bold underline underline-offset-2;
+  }
+  .markdown code {
+    @apply rounded bg-subtle px-1.5 py-0.5 font-mono text-[13px];
+  }
+  .markdown pre {
+    @apply overflow-x-auto rounded bg-subtle p-3;
+  }
+  .markdown pre code {
+    @apply bg-transparent p-0;
+  }
+  .markdown blockquote {
+    @apply border-l-[3px] border-line pl-3 text-muted;
+  }
+  .markdown hr {
+    @apply my-5 border-line;
+  }
+  .markdown table {
+    @apply block w-full overflow-x-auto text-sm;
+  }
+  .markdown th,
+  .markdown td {
+    @apply border border-line px-3 py-1.5 text-left;
+  }
+  .markdown th {
+    @apply bg-subtle font-bold;
   }
 }

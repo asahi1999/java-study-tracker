@@ -1,10 +1,11 @@
 import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
-import { weekRepository } from '@/db/repositories';
+import { settingsRepository, weekRepository } from '@/db/repositories';
 import { seedIfEmpty } from '@/db/seed';
 
+import { setToday } from '../../../tests/time';
 import { LineRail } from './LineRail';
 
 function renderRail() {
@@ -16,6 +17,11 @@ function renderRail() {
 }
 
 describe('LineRail', () => {
+  beforeEach(() => {
+    // 学習開始日（11/16・月）の2日後。1週目の途中
+    setToday('2026-11-18');
+  });
+
   it('初期ロードマップの10週をリンクとして並べる', async () => {
     await seedIfEmpty('2026-11-16');
     renderRail();
@@ -34,6 +40,16 @@ describe('LineRail', () => {
     });
 
     expect(link).toHaveTextContent('5–6');
+  });
+
+  it('今日が予定期間に入っている週には「今週」と付ける', async () => {
+    await seedIfEmpty('2026-11-16');
+    renderRail();
+
+    expect(
+      await screen.findByRole('link', { name: '1週目 数当てゲーム（未着手・今週）' }),
+    ).toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: /今週/ })).toHaveLength(1);
   });
 
   it('駅を押すとその週の詳細へ移動するリンクになっている', async () => {
@@ -60,12 +76,39 @@ describe('LineRail', () => {
   it('週の状態が変わったら表示に反映する', async () => {
     await seedIfEmpty('2026-11-16');
     renderRail();
-    await screen.findByRole('link', { name: '1週目 数当てゲーム（未着手）' });
+    await screen.findByRole('link', { name: '1週目 数当てゲーム（未着手・今週）' });
 
     await weekRepository.update('week-01', { status: 'done' });
 
     expect(
-      await screen.findByRole('link', { name: '1週目 数当てゲーム（完成）' }),
+      await screen.findByRole('link', { name: '1週目 数当てゲーム（完成・今週）' }),
+    ).toBeInTheDocument();
+  });
+
+  it('予定終了日を過ぎた未完成の週は「遅れ」として示す', async () => {
+    // 1週目の予定は 11/22 まで
+    setToday('2026-11-25');
+    await seedIfEmpty('2026-11-16');
+    renderRail();
+
+    expect(
+      await screen.findByRole('link', { name: '1週目 数当てゲーム（遅れ）' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: '2週目 じゃんけんゲーム（勝敗を記録）（未着手・今週）' }),
+    ).toBeInTheDocument();
+  });
+
+  it('学習開始日を変えると、遅れの判定も変わる', async () => {
+    setToday('2026-11-25');
+    await seedIfEmpty('2026-11-16');
+    renderRail();
+    await screen.findByRole('link', { name: '1週目 数当てゲーム（遅れ）' });
+
+    await settingsRepository.update({ startDate: '2026-11-23' });
+
+    expect(
+      await screen.findByRole('link', { name: '1週目 数当てゲーム（未着手・今週）' }),
     ).toBeInTheDocument();
   });
 

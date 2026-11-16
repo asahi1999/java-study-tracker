@@ -26,6 +26,10 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+    rules: {
+      // 「const { id, ...rest } = obj」のように、一部の項目を取り除く目的で書いた変数は未使用でも許可する
+      '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
+    },
   },
 
   // 設定ファイル（Node.js で動くコード）

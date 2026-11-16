@@ -3,7 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { createInitialRoadmap } from '@/data/initialRoadmap';
 
 import { buildWeek } from '../../tests/factories';
-import { layoutRail } from './rail';
+import { getTodayPosition, layoutRail } from './rail';
+import { buildSchedule } from './schedule';
 
 describe('layoutRail', () => {
   it('週がなければ列も段も0になる', () => {
@@ -108,5 +109,57 @@ describe('layoutRail', () => {
     expect(layout.segments.filter(({ lane }) => lane === 1).map(({ week }) => week.id)).toEqual([
       'week-11-git',
     ]);
+  });
+});
+
+describe('getTodayPosition', () => {
+  const { weeks } = createInitialRoadmap();
+  const layout = layoutRail(weeks);
+  const ranges = buildSchedule(weeks, { startDate: '2026-11-16', breakPeriods: [] });
+
+  it('1週目の初日は、1列目の左寄りに置く', () => {
+    // 1列は全体の 1/12。7日間の1日目の真ん中なので、列の中の 0.5/7 の位置
+    expect(getTodayPosition(layout, ranges, '2026-11-16')).toBeCloseTo(0.5 / 7 / 12);
+  });
+
+  it('週の真ん中の日は、その列の中央（駅の印の位置）に来る', () => {
+    // 11/19 は1週目の4日目
+    expect(getTodayPosition(layout, ranges, '2026-11-19')).toBeCloseTo(0.5 / 12);
+  });
+
+  it('日がたつにつれて右へ進む', () => {
+    const monday = getTodayPosition(layout, ranges, '2026-11-16') ?? 0;
+    const sunday = getTodayPosition(layout, ranges, '2026-11-22') ?? 0;
+    const nextMonday = getTodayPosition(layout, ranges, '2026-11-23') ?? 0;
+
+    expect(sunday).toBeGreaterThan(monday);
+    expect(nextMonday).toBeGreaterThan(sunday);
+  });
+
+  it('2週分の週では、2列ぶんの幅を14日かけて進む', () => {
+    // 12/14 は5〜6週目の初日、12/27 は最終日
+    expect(getTodayPosition(layout, ranges, '2026-12-14')).toBeCloseTo((4 + (0.5 / 14) * 2) / 12);
+    expect(getTodayPosition(layout, ranges, '2026-12-27')).toBeCloseTo((4 + (13.5 / 14) * 2) / 12);
+  });
+
+  it('11週目は本線にある週（11〜12週目）を基準にする', () => {
+    // 1/25 は11〜12週目の初日
+    expect(getTodayPosition(layout, ranges, '2027-01-25')).toBeCloseTo((10 + (0.5 / 14) * 2) / 12);
+  });
+
+  it('最終日でも右端（1）を超えない', () => {
+    const position = getTodayPosition(layout, ranges, '2027-02-07') ?? 0;
+
+    expect(position).toBeLessThan(1);
+    expect(position).toBeGreaterThan(11 / 12);
+  });
+
+  it('学習開始日より前と、最後の週が終わった後は null を返す', () => {
+    expect(getTodayPosition(layout, ranges, '2026-11-15')).toBeNull();
+    expect(getTodayPosition(layout, ranges, '2027-02-08')).toBeNull();
+  });
+
+  it('週がなければ null を返す', () => {
+    expect(getTodayPosition(layoutRail([]), new Map(), '2026-11-16')).toBeNull();
   });
 });
