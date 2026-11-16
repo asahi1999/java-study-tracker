@@ -98,6 +98,7 @@ java-study-tracker/
 │   │   ├── week.ts         # 週の表示用の文字列
 │   │   ├── progress.ts     # 進捗率
 │   │   ├── schedule.ts     # 予定日・遅れ判定
+│   │   ├── weekStatus.ts   # 状態の更新（自動で進行中にする・完成・取り消し）
 │   │   ├── streak.ts       # 連続学習日数
 │   │   ├── stats.ts        # 集計
 │   │   ├── badges.ts       # バッジ判定

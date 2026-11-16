@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatWeekRange, formatWeekRangeShort, WEEK_STATUS_LABELS } from './week';
+import {
+  formatWeekRange,
+  formatWeekRangeShort,
+  normalizeWeekSpan,
+  WEEK_STATUS_LABELS,
+} from './week';
 
 describe('formatWeekRange', () => {
   it('1週だけなら「N週目」にする', () => {
@@ -19,6 +24,25 @@ describe('formatWeekRangeShort', () => {
 
   it('複数週にまたがるなら「N–M」にする', () => {
     expect(formatWeekRangeShort({ weekStart: 11, weekEnd: 12 })).toBe('11–12');
+  });
+});
+
+describe('normalizeWeekSpan', () => {
+  it('正しい範囲はそのまま返す', () => {
+    expect(normalizeWeekSpan({ weekStart: 5, weekEnd: 6 })).toEqual({ start: 5, end: 6 });
+  });
+
+  it('1より小さい開始は1週目にする', () => {
+    expect(normalizeWeekSpan({ weekStart: 0, weekEnd: 2 })).toEqual({ start: 1, end: 2 });
+    expect(normalizeWeekSpan({ weekStart: -3, weekEnd: -1 })).toEqual({ start: 1, end: 1 });
+  });
+
+  it('開始より前の終了は、開始と同じ週にする', () => {
+    expect(normalizeWeekSpan({ weekStart: 4, weekEnd: 2 })).toEqual({ start: 4, end: 4 });
+  });
+
+  it('小数は切り捨てる', () => {
+    expect(normalizeWeekSpan({ weekStart: 2.9, weekEnd: 3.5 })).toEqual({ start: 2, end: 3 });
   });
 });
 

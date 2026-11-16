@@ -17,3 +17,17 @@ export function formatWeekRange({ weekStart, weekEnd }: WeekRange): string {
 export function formatWeekRangeShort({ weekStart, weekEnd }: WeekRange): string {
   return weekStart === weekEnd ? `${weekStart}` : `${weekStart}–${weekEnd}`;
 }
+
+/**
+ * 週番号の範囲を、計算に使える形にそろえる。
+ * 編集画面の入力ミスなどで不正な値が入っていても、計算結果が壊れないようにするため。
+ * 1より小さい開始は1週目に、開始より前の終了は開始と同じ週に直す
+ */
+export function normalizeWeekSpan({ weekStart, weekEnd }: WeekRange): {
+  start: number;
+  end: number;
+} {
+  const start = Math.max(1, Math.floor(weekStart));
+  const end = Math.max(start, Math.floor(weekEnd));
+  return { start, end };
+}
