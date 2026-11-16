@@ -27,8 +27,12 @@ const BOARD_SELECT =
   'mt-1 block h-10 w-full rounded border-[1.5px] border-board-line bg-board px-2 text-sm text-board-ink';
 
 /**
- * 学習タイマー。全画面の右下に小さく出し、押すと操作パネルを開く。
- * 駅の発車案内のように、濃紺の板に黄色の数字で時間を出している
+ * 学習タイマー。小さなボタンとして出し、押すと操作パネルを開く。
+ * 駅の発車案内のように、濃紺の板に黄色の数字で時間を出している。
+ *
+ * 置き場所は画面の幅で変える。
+ * - スマホ：画面の右下（下部タブの上）
+ * - PC：サイドバーの下。本文の上に浮かせると一覧やグラフの右端に重なるので、本文が来ない場所に置く
  */
 export function TimerWidget() {
   const panelId = useId();
@@ -102,7 +106,7 @@ export function TimerWidget() {
 
   return (
     <>
-      <div className="on-board fixed bottom-[calc(4.25rem+env(safe-area-inset-bottom))] right-3 z-40 [color-scheme:dark] md:bottom-5 md:right-6">
+      <div className="on-board fixed bottom-[calc(4.25rem+env(safe-area-inset-bottom))] right-3 z-40 [color-scheme:dark] md:bottom-4 md:left-3 md:right-auto md:w-[12.5rem]">
         {panelOpen && (
           <section
             id={panelId}
@@ -110,7 +114,8 @@ export function TimerWidget() {
             onKeyDown={(event) => {
               if (event.key === 'Escape') closePanel();
             }}
-            className="absolute bottom-full right-0 mb-2 w-[min(20rem,calc(100vw-1.5rem))] rounded-md border border-board-line bg-board p-4 text-board-ink shadow-2xl"
+            // PCではサイドバーの幅に収める（本文の上にはみ出さない）
+            className="absolute bottom-full right-0 mb-2 w-[min(20rem,calc(100vw-1.5rem))] rounded-md border border-board-line bg-board p-4 text-board-ink shadow-2xl md:left-0 md:right-auto md:w-full md:p-3 md:shadow-none"
           >
             <p className="text-[13px] font-bold leading-none text-board-muted">
               {STATUS_LABELS[timer.status]}
@@ -118,7 +123,7 @@ export function TimerWidget() {
             <p
               role="timer"
               aria-label="経過時間"
-              className={`mt-2 font-num text-5xl font-bold leading-none ${
+              className={`mt-2 font-num text-5xl font-bold leading-none md:text-[40px] ${
                 timer.status === 'running' ? 'text-accent' : ''
               }`}
             >
@@ -136,7 +141,7 @@ export function TimerWidget() {
               className={BOARD_SELECT}
             />
 
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-4 flex flex-wrap gap-2 md:flex-col">
               {timer.status === 'idle' && (
                 <Button variant="primary" className="flex-1" onClick={() => timer.start(weekId)}>
                   <Play aria-hidden className="size-4" />
@@ -192,12 +197,16 @@ export function TimerWidget() {
           aria-expanded={panelOpen}
           aria-controls={panelOpen ? panelId : undefined}
           onClick={() => setPanelOpen((open) => !open)}
-          className="ml-auto flex h-12 items-center gap-2 rounded-full border border-board-line bg-board pl-4 pr-3 text-board-ink shadow-lg transition-colors hover:bg-board/90"
+          className="ml-auto flex h-12 items-center gap-2 rounded-full border border-board-line bg-board pl-4 pr-3 text-board-ink shadow-lg transition-colors hover:bg-board/90 md:ml-0 md:w-full md:rounded-md md:bg-white/5 md:shadow-none md:hover:bg-white/10"
         >
-          <Timer
-            aria-hidden
-            className={`size-5 ${timer.status === 'running' ? 'text-accent' : 'text-board-muted'}`}
-          />
+          {timer.status === 'paused' ? (
+            <Pause aria-hidden className="size-5 text-board-muted" />
+          ) : (
+            <Timer
+              aria-hidden
+              className={`size-5 ${timer.status === 'running' ? 'text-accent' : 'text-board-muted'}`}
+            />
+          )}
           <span className="sr-only">学習タイマー</span>
           {timer.status === 'idle' ? (
             <span aria-hidden className="text-sm font-bold">
@@ -206,14 +215,12 @@ export function TimerWidget() {
           ) : (
             <>
               <span className="font-num text-xl font-bold leading-none">{elapsed}</span>
-              {timer.status === 'paused' && (
-                <span className="text-xs text-board-muted">一時停止中</span>
-              )}
+              {timer.status === 'paused' && <span className="sr-only">一時停止中</span>}
             </>
           )}
           <ChevronDown
             aria-hidden
-            className={`size-4 text-board-muted transition-transform ${panelOpen ? '' : 'rotate-180'}`}
+            className={`size-4 text-board-muted transition-transform md:ml-auto ${panelOpen ? '' : 'rotate-180'}`}
           />
         </button>
       </div>

@@ -23,7 +23,8 @@ export function Sidebar() {
           Tracker
         </p>
       </div>
-      <nav aria-label="メインメニュー" className="flex-1 overflow-y-auto px-3 pb-4">
+      {/* 下の余白は、サイドバーの下に置く学習タイマーにメニューが隠れないようにするため */}
+      <nav aria-label="メインメニュー" className="flex-1 overflow-y-auto px-3 pb-20">
         <ul className="grid gap-1">
           {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
             <li key={to}>

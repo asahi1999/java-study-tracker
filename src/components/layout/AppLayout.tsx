@@ -37,8 +37,8 @@ export function AppLayout() {
         <main
           ref={mainRef}
           tabIndex={-1}
-          // 下の余白は、下部タブと右下のタイマーに本文の最後が隠れないよう広めに取っている
-          className="mx-auto w-full max-w-5xl flex-1 px-4 pb-36 pt-5 outline-none md:px-8 md:pb-24 md:pt-7"
+          // スマホでは、下部タブと右下のタイマーに本文の最後が隠れないよう、下の余白を広めに取っている
+          className="mx-auto w-full max-w-5xl flex-1 px-4 pb-36 pt-5 outline-none md:px-8 md:pb-10 md:pt-7"
         >
           <Outlet />
         </main>
