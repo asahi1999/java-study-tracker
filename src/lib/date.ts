@@ -1,4 +1,4 @@
-import { addDays, differenceInCalendarDays, format, isValid, parse } from 'date-fns';
+import { addDays, differenceInCalendarDays, format, isValid, parse, startOfWeek } from 'date-fns';
 
 // このアプリでは日付を「YYYY-MM-DD」の文字列で持つ。
 // この形式は文字列のまま大小を比べられる（'2026-12-31' < '2027-01-01'）ので、
@@ -41,4 +41,12 @@ export function addDaysToDate(value: string, days: number): string {
 /** later が earlier の何日後か。同じ日なら 0、later のほうが前ならマイナス */
 export function diffInDays(later: string, earlier: string): number {
   return differenceInCalendarDays(parseDateString(later), parseDateString(earlier));
+}
+
+/**
+ * その日を含む暦週の月曜日を返す。
+ * 「今週の学習時間」や週別のグラフは、予定の週ではなく月曜始まりの暦週で集計するため
+ */
+export function startOfWeekMonday(value: string): string {
+  return toDateString(startOfWeek(parseDateString(value), { weekStartsOn: 1 }));
 }

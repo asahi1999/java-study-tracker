@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { createInitialRoadmap } from '@/data/initialRoadmap';
 
-import { buildWeekViews } from './weekView';
+import { buildWeekViews, findNextWeekView } from './weekView';
 
 const SETTINGS = { startDate: '2026-11-16', breakPeriods: [] };
 
@@ -72,5 +72,51 @@ describe('buildWeekViews', () => {
 
   it('週がなければ空の配列を返す', () => {
     expect(buildWeekViews([], [], SETTINGS, '2026-11-16')).toEqual([]);
+  });
+});
+
+describe('findNextWeekView', () => {
+  function build(prepare?: (roadmap: ReturnType<typeof createInitialRoadmap>) => void) {
+    const roadmap = createInitialRoadmap();
+    prepare?.(roadmap);
+    return buildWeekViews(roadmap.weeks, roadmap.skills, SETTINGS, '2026-11-01');
+  }
+
+  it('どの週も完成していなければ、最初の週を返す', () => {
+    expect(findNextWeekView(build())?.week.id).toBe('week-01');
+  });
+
+  it('完成した週は飛ばして、表示順でいちばん手前の未完成の週を返す', () => {
+    const views = build(({ weeks }) => {
+      weeks[0]!.status = 'done';
+      weeks[2]!.status = 'done';
+    });
+
+    expect(findNextWeekView(views)?.week.id).toBe('week-02');
+  });
+
+  it('進行中の週も未完成として扱う', () => {
+    const views = build(({ weeks }) => {
+      weeks[0]!.status = 'done';
+      weeks[1]!.status = 'in_progress';
+    });
+
+    expect(findNextWeekView(views)?.week.id).toBe('week-02');
+  });
+
+  it('渡した順番が表示順でなくても、表示順で探す', () => {
+    expect(findNextWeekView([...build()].reverse())?.week.id).toBe('week-01');
+  });
+
+  it('すべて完成していれば null を返す', () => {
+    const views = build(({ weeks }) => {
+      for (const week of weeks) week.status = 'done';
+    });
+
+    expect(findNextWeekView(views)).toBeNull();
+  });
+
+  it('週がなければ null を返す', () => {
+    expect(findNextWeekView([])).toBeNull();
   });
 });

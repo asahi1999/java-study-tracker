@@ -99,6 +99,14 @@ export function buildSchedule(
   return new Map(weeks.map((week) => [week.id, getPlannedRange(week, settings)]));
 }
 
+/** いちばん遅い予定終了日（ロードマップのゴール予定日）。週が1つもなければ null */
+export function getScheduleEndDate(ranges: readonly PlannedRange[]): string | null {
+  return ranges.reduce<string | null>(
+    (latest, { end }) => (latest === null || end > latest ? end : latest),
+    null,
+  );
+}
+
 /** 指定した日が予定期間に入っているか（開始日と終了日を含む） */
 export function isDateInRange(date: string, range: PlannedRange): boolean {
   return range.start <= date && date <= range.end;

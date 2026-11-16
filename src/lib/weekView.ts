@@ -44,3 +44,14 @@ export function buildWeekViews(
       };
     });
 }
+
+/**
+ * 次に取り組む週（表示順でいちばん手前の、まだ完成していない週）。
+ * 現在の週がないとき（開始前・休止中・終了後）に案内するために使う。すべて完成していれば null
+ */
+export function findNextWeekView(views: readonly WeekView[]): WeekView | null {
+  return (
+    [...views].sort((a, b) => a.week.order - b.week.order).find((v) => v.week.status !== 'done') ??
+    null
+  );
+}

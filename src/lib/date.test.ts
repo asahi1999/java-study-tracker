@@ -5,6 +5,7 @@ import {
   diffInDays,
   isDateString,
   parseDateString,
+  startOfWeekMonday,
   toDateString,
   todayString,
 } from './date';
@@ -115,5 +116,23 @@ describe('diffInDays', () => {
 
   it('addDaysToDate と逆の関係になる', () => {
     expect(diffInDays(addDaysToDate('2026-11-16', 83), '2026-11-16')).toBe(83);
+  });
+});
+
+describe('startOfWeekMonday', () => {
+  it('月曜日はその日を返す', () => {
+    expect(startOfWeekMonday('2026-11-16')).toBe('2026-11-16');
+  });
+
+  it('週の途中の日は、その週の月曜日を返す', () => {
+    expect(startOfWeekMonday('2026-11-19')).toBe('2026-11-16');
+  });
+
+  it('日曜日は、6日前の月曜日を返す（日曜始まりにしない）', () => {
+    expect(startOfWeekMonday('2026-11-22')).toBe('2026-11-16');
+  });
+
+  it('年をまたぐ週でも月曜日を返す', () => {
+    expect(startOfWeekMonday('2027-01-01')).toBe('2026-12-28');
   });
 });

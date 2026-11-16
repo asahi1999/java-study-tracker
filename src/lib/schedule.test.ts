@@ -9,6 +9,7 @@ import {
   findCurrentWeeks,
   getDisplayStatus,
   getPlannedRange,
+  getScheduleEndDate,
   isBreakDay,
   isDateInRange,
   isWeekLate,
@@ -466,5 +467,38 @@ describe('getDisplayStatus', () => {
 
   it('完成した週は予定終了日を過ぎても「完成」のまま', () => {
     expect(getDisplayStatus({ status: 'done' }, range, '2026-11-23')).toBe('done');
+  });
+});
+
+describe('getScheduleEndDate', () => {
+  it('いちばん遅い予定終了日を返す', () => {
+    const { weeks } = createInitialRoadmap();
+    const schedule = buildSchedule(weeks, { startDate: START, breakPeriods: [] });
+
+    // 12週目の最終日（開始日 + 12×7日 − 1日）
+    expect(getScheduleEndDate([...schedule.values()])).toBe('2027-02-07');
+  });
+
+  it('並び順が終了日の順でなくても、いちばん遅い日を返す', () => {
+    expect(
+      getScheduleEndDate([
+        { start: '2026-11-30', end: '2026-12-06' },
+        { start: '2026-11-16', end: '2026-11-22' },
+      ]),
+    ).toBe('2026-12-06');
+  });
+
+  it('休止期間があると、その分だけ後ろにずれる', () => {
+    const { weeks } = createInitialRoadmap();
+    const breakPeriods: BreakPeriod[] = [
+      { id: 'b1', label: '年末年始', start: '2026-12-29', end: '2027-01-03' },
+    ];
+    const schedule = buildSchedule(weeks, { startDate: START, breakPeriods });
+
+    expect(getScheduleEndDate([...schedule.values()])).toBe('2027-02-13');
+  });
+
+  it('週が1つもなければ null を返す', () => {
+    expect(getScheduleEndDate([])).toBeNull();
   });
 });
