@@ -1,0 +1,21 @@
+# 依存パッケージ
+node_modules
+
+# ビルド・テストの出力
+dist
+coverage
+*.tsbuildinfo
+
+# ローカル設定
+*.local
+.env
+.env.*
+
+# ログ
+*.log
+
+# OS・エディタ
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
