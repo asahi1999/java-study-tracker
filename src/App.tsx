@@ -1,66 +1,50 @@
-import { useLiveQuery } from 'dexie-react-hooks';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 
-import {
-  monthRepository,
-  skillRepository,
-  stepRepository,
-  weekRepository,
-} from '@/db/repositories';
+import { AppLayout } from '@/components/layout/AppLayout';
+import { ErrorScreen } from '@/components/ui/ErrorScreen';
+import { LoadingScreen } from '@/components/ui/LoadingScreen';
 import { useAppBootstrap } from '@/hooks/useAppBootstrap';
+import { useApplyTheme } from '@/hooks/useTheme';
+import { BadgesPage } from '@/pages/BadgesPage';
+import { DashboardPage } from '@/pages/DashboardPage';
+import { EditorPage } from '@/pages/EditorPage';
+import { LogsPage } from '@/pages/LogsPage';
+import { NotFoundPage } from '@/pages/NotFoundPage';
+import { RoadmapPage } from '@/pages/RoadmapPage';
+import { SettingsPage } from '@/pages/SettingsPage';
+import { StatsPage } from '@/pages/StatsPage';
+import { WeekDetailPage } from '@/pages/WeekDetailPage';
 
-// フェーズ1時点の仮画面。初期データが入ったことを確認するためのもので、
-// フェーズ2でレイアウトとルーティングに置き換える
-export default function App() {
-  const bootstrap = useAppBootstrap();
-
-  if (bootstrap.status === 'loading') {
-    return <p className="p-6 text-slate-600">読み込み中…</p>;
-  }
-
-  if (bootstrap.status === 'error') {
-    return (
-      <div role="alert" className="p-6 text-red-700">
-        <p className="font-bold">データベースを開けませんでした。</p>
-        <p className="mt-1 text-sm">{bootstrap.message}</p>
-      </div>
-    );
-  }
-
-  return <SeedSummary />;
+/** URLと画面の対応。テストでは別のルーターで包んで使うため、ルーター本体とは分けている */
+export function AppRoutes() {
+  return (
+    <Routes>
+      <Route element={<AppLayout />}>
+        <Route index element={<DashboardPage />} />
+        <Route path="roadmap" element={<RoadmapPage />} />
+        <Route path="roadmap/:weekId" element={<WeekDetailPage />} />
+        <Route path="logs" element={<LogsPage />} />
+        <Route path="stats" element={<StatsPage />} />
+        <Route path="badges" element={<BadgesPage />} />
+        <Route path="editor" element={<EditorPage />} />
+        <Route path="settings" element={<SettingsPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
+  );
 }
 
-function SeedSummary() {
-  const counts = useLiveQuery(async () => {
-    const [months, steps, weeks, skills] = await Promise.all([
-      monthRepository.getAll(),
-      stepRepository.getAll(),
-      weekRepository.getAll(),
-      skillRepository.getAll(),
-    ]);
-    return {
-      months: months.length,
-      steps: steps.length,
-      weeks: weeks.length,
-      skills: skills.length,
-    };
-  });
+export default function App() {
+  const bootstrap = useAppBootstrap();
+  useApplyTheme();
 
-  if (!counts) return null;
+  if (bootstrap.status === 'loading') return <LoadingScreen />;
+  if (bootstrap.status === 'error') return <ErrorScreen message={bootstrap.message} />;
 
+  // GitHub Pages はサーバー側でURLを書き換えられないので、# 以降でページを切り替える HashRouter を使う
   return (
-    <main className="mx-auto max-w-md p-6 text-slate-900">
-      <h1 className="text-xl font-bold">Java Study Tracker</h1>
-      <p className="mt-2 text-sm text-slate-600">初期データを読み込みました。</p>
-      <dl className="mt-4 grid grid-cols-2 gap-2 tabular-nums">
-        <dt>月</dt>
-        <dd>{counts.months}</dd>
-        <dt>ステップ</dt>
-        <dd>{counts.steps}</dd>
-        <dt>週</dt>
-        <dd>{counts.weeks}</dd>
-        <dt>チェック項目</dt>
-        <dd>{counts.skills}</dd>
-      </dl>
-    </main>
+    <HashRouter>
+      <AppRoutes />
+    </HashRouter>
   );
 }

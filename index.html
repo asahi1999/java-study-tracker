@@ -2,9 +2,28 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Java学習の3ヶ月ロードマップを管理する学習トラッカー" />
+    <meta name="theme-color" content="#0F2147" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Java Study Tracker</title>
+    <script>
+      // 起動時に画面が一瞬ちがうテーマで光るのを防ぐため、Reactが動く前にテーマを当てる。
+      // 設定の正本は IndexedDB にあるが読み込みに時間がかかるので、
+      // テーマだけ localStorage に写しを置いている（キーは src/db/themeCache.ts と同じにすること）
+      (function () {
+        var theme = null;
+        try {
+          theme = localStorage.getItem('java-study-tracker:theme');
+        } catch (e) {
+          // プライベートブラウズなどで読めない場合は、OSの設定に合わせる
+        }
+        var systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (theme === 'dark' || (theme !== 'light' && systemPrefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

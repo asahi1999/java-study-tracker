@@ -1,3 +1,129 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * 数字だけを欧文フォント（Barlow Semi Condensed）で表示するための定義。
+ * 本文の日本語フォント（BIZ UDPゴシック）は数字の幅が字ごとに違い、表やタイマーで桁がそろわない。
+ * unicode-range で 0〜9 だけをこのフォントに割り当て、font-family の先頭に置くことで、
+ * アプリ内のすべての数字を等幅でそろえている。
+ *
+ * この欧文フォントは数字の背が日本語フォントより1割ほど低いので、size-adjust で高さをそろえている
+ */
+@font-face {
+  font-family: 'JST Numerals';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('@fontsource/barlow-semi-condensed/files/barlow-semi-condensed-latin-400-normal.woff2')
+    format('woff2');
+  unicode-range: U+0030-0039;
+  size-adjust: 112%;
+}
+
+@font-face {
+  font-family: 'JST Numerals';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('@fontsource/barlow-semi-condensed/files/barlow-semi-condensed-latin-700-normal.woff2')
+    format('woff2');
+  unicode-range: U+0030-0039;
+  size-adjust: 112%;
+}
+
+@layer base {
+  /* 色は「R G B」の3つ組で持つ。Tailwind 側で透明度を足せるようにするため */
+  :root {
+    --bg: 238 241 246;
+    --surface: 255 255 255;
+    --subtle: 221 227 238;
+    --ink: 15 33 71;
+    --muted: 86 102 138;
+    --line: 211 218 232;
+
+    --board: 15 33 71;
+    --board-ink: 255 255 255;
+    --board-muted: 169 184 216;
+    --board-line: 42 60 102;
+
+    --accent: 255 196 0;
+    --accent-ink: 15 33 71;
+
+    /* 黄色は白地では見えにくいので、ライトでは進捗の塗りを濃紺にする */
+    --progress: 15 33 71;
+    --focus: 15 33 71;
+
+    --st-gray: 124 135 155;
+    --st-gray-fg: 73 85 114;
+    --st-gray-bg: 233 236 242;
+    --st-blue: 43 108 224;
+    --st-blue-fg: 29 79 176;
+    --st-blue-bg: 227 236 252;
+    --st-green: 27 154 102;
+    --st-green-fg: 15 107 69;
+    --st-green-bg: 223 243 234;
+    --st-red: 214 63 56;
+    --st-red-fg: 168 40 34;
+    --st-red-bg: 251 229 227;
+  }
+
+  .dark {
+    --bg: 8 18 38;
+    --surface: 15 30 61;
+    --subtle: 36 56 96;
+    --ink: 238 242 250;
+    --muted: 157 173 205;
+    --line: 36 56 96;
+
+    --board: 5 12 27;
+    --board-line: 26 42 77;
+
+    --progress: 255 196 0;
+    --focus: 255 196 0;
+
+    --st-gray: 142 154 179;
+    --st-gray-fg: 195 204 222;
+    --st-gray-bg: 37 50 79;
+    --st-blue: 91 147 245;
+    --st-blue-fg: 157 192 255;
+    --st-blue-bg: 23 48 95;
+    --st-green: 45 189 131;
+    --st-green-fg: 127 224 180;
+    --st-green-bg: 15 59 51;
+    --st-red: 240 101 94;
+    --st-red-fg: 255 169 163;
+    --st-red-bg: 74 31 42;
+  }
+
+  /* 濃紺の板の上では、濃紺のフォーカス枠が見えないので黄色にする */
+  .on-board {
+    --focus: 255 196 0;
+  }
+
+  body {
+    @apply bg-bg font-sans text-ink antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--focus));
+    outline-offset: 2px;
+  }
+
+  /* ダイアログを開いている間は、後ろの画面をスクロールさせない */
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
