@@ -57,7 +57,11 @@ export function WeeklyHoursChart({ weeks, goalHours }: WeeklyHoursChartProps) {
 
           <div aria-hidden className="mt-3 h-52">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data} margin={{ top: 18, right: 4, bottom: 0, left: 0 }}>
+              <BarChart
+                accessibilityLayer={false}
+                data={data}
+                margin={{ top: 18, right: 4, bottom: 0, left: 0 }}
+              >
                 <CartesianGrid stroke={CHART_COLORS.line} vertical={false} />
                 <XAxis
                   dataKey="weekStart"

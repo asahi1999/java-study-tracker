@@ -77,7 +77,11 @@ export function PaceDiagram({ pace, status, progress }: PaceDiagramProps) {
           {/* グラフは目で見るためのもの。同じ内容を、下の表で読み上げられるようにしている */}
           <div aria-hidden className="mt-2 h-64 sm:h-72">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartPoints} margin={{ top: 22, right: 14, bottom: 0, left: 0 }}>
+              <LineChart
+                accessibilityLayer={false}
+                data={chartPoints}
+                margin={{ top: 22, right: 14, bottom: 0, left: 0 }}
+              >
                 <CartesianGrid stroke={CHART_COLORS.line} strokeDasharray="2 4" />
                 <XAxis
                   dataKey="week"

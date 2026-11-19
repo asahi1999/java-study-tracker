@@ -345,7 +345,8 @@ describe('WeekDetailPage', () => {
       await user.type(textarea, 'Scanner の使い方を調べた');
 
       expect(screen.getByText('保存中…')).toBeInTheDocument();
-      expect(await screen.findByText('保存しました', {}, { timeout: 3000 })).toBeInTheDocument();
+      // 待ち時間は tests/setup.ts の共通設定（5秒）に任せる。ここだけ短くすると、負荷が高いときに時間切れになる
+      expect(await screen.findByText('保存しました')).toBeInTheDocument();
       expect((await getWeek())?.memo).toBe('Scanner の使い方を調べた');
     });
 

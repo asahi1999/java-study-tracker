@@ -90,13 +90,15 @@ describe('StatsPage', () => {
 
       const card = await findCard('学習カレンダー');
       expect(
-        within(card).getByRole('img', {
+        within(card).getByRole('group', {
           name: '11月16日（月）から2月7日（日）までの学習カレンダー。学習した日は0日',
         }),
       ).toBeInTheDocument();
       // 今日までの日は時間つき、これからの日は日付だけ
-      expect(within(card).getByTitle('11月16日（月）：0分')).toBeInTheDocument();
-      expect(within(card).getByTitle('11月19日（木）')).toBeInTheDocument();
+      expect(within(card).getByRole('button', { name: '11月16日（月）：0分' })).toBeInTheDocument();
+      expect(within(card).getByRole('button', { name: '11月19日（木）' })).toBeInTheDocument();
+      // 12週間（84日）すべてのマスがある
+      expect(within(card).getAllByRole('button')).toHaveLength(84);
     });
   });
 
@@ -158,20 +160,23 @@ describe('StatsPage', () => {
       renderPage();
 
       const card = await findCard('学習カレンダー');
-      expect(within(card).getByTitle('11月16日（月）：1時間30分')).toHaveClass('bg-heat-3');
-      expect(within(card).getByTitle('11月17日（火）：0分')).toHaveClass('bg-heat-0');
-      expect(within(card).getByTitle('11月20日（金）：45分')).toHaveClass('bg-heat-2');
-      expect(within(card).getByRole('img', { name: /学習した日は4日$/ })).toBeInTheDocument();
+      const cell = (name: string) => within(card).getByRole('button', { name });
+      expect(cell('11月16日（月）：1時間30分')).toHaveClass('bg-heat-3');
+      expect(cell('11月17日（火）：0分')).toHaveClass('bg-heat-0');
+      expect(cell('11月20日（金）：45分')).toHaveClass('bg-heat-2');
+      expect(within(card).getByRole('group', { name: /学習した日は4日$/ })).toBeInTheDocument();
     });
 
     it('マスにカーソルを合わせると、その日の日付と学習時間を表示する', async () => {
       renderPage();
       const card = await findCard('学習カレンダー');
       expect(card).toHaveTextContent(
-        'マスに合わせる（スマホでは押す）と、その日の学習時間が出ます。',
+        'マスにカーソルを合わせる・押す・矢印キーで選ぶと、その日の学習時間が出ます。',
       );
 
-      await userEvent.hover(within(card).getByTitle('11月18日（水）：1時間30分'));
+      await userEvent.hover(
+        within(card).getByRole('button', { name: '11月18日（水）：1時間30分' }),
+      );
 
       expect(within(card).getByText('11月18日（水）：1時間30分')).toBeInTheDocument();
     });
@@ -180,9 +185,128 @@ describe('StatsPage', () => {
       renderPage();
       const card = await findCard('学習カレンダー');
 
-      await userEvent.click(within(card).getByTitle('11月20日（金）：45分'));
+      await userEvent.click(within(card).getByRole('button', { name: '11月20日（金）：45分' }));
 
       expect(within(card).getByText('11月20日（金）：45分')).toBeInTheDocument();
+    });
+  });
+
+  describe('学習カレンダーのキーボード操作', () => {
+    beforeEach(async () => {
+      // 11/18（水）は1週目の3日目
+      setToday('2026-11-18');
+      await seedIfEmpty(START);
+      await db.logs.bulkAdd([
+        buildLog({ id: 'l1', date: '2026-11-16', minutes: 90, weekId: 'week-01' }),
+        buildLog({ id: 'l2', date: '2026-11-17', minutes: 20, weekId: 'week-01' }),
+        buildLog({ id: 'l3', date: '2026-11-18', minutes: 45, weekId: 'week-01' }),
+      ]);
+    });
+
+    /** カレンダーのカードと、下に出る欄の文字を返す */
+    async function setup() {
+      renderPage();
+      const card = await findCard('学習カレンダー');
+      const shown = () => card.querySelector('p[aria-hidden]')?.textContent ?? '';
+      return { card, shown };
+    }
+
+    it('Tab で入れるのは1マスだけで、最初は今日のマス', async () => {
+      const { card } = await setup();
+
+      const reachable = within(card)
+        .getAllByRole('button')
+        .filter((button) => button.tabIndex === 0);
+      expect(reachable).toHaveLength(1);
+      expect(reachable[0]).toHaveAccessibleName('11月18日（水）：45分');
+      expect(reachable[0]).toHaveAttribute('aria-current', 'date');
+    });
+
+    it('Tab でマスに入ると、その日の日付と学習時間を出す', async () => {
+      const { card, shown } = await setup();
+
+      await userEvent.tab();
+
+      expect(within(card).getByRole('button', { name: '11月18日（水）：45分' })).toHaveFocus();
+      expect(shown()).toBe('11月18日（水）：45分');
+    });
+
+    it('上下の矢印キーで1日ずつ動く', async () => {
+      const { card, shown } = await setup();
+      await userEvent.tab();
+
+      await userEvent.keyboard('{ArrowUp}');
+      expect(within(card).getByRole('button', { name: '11月17日（火）：20分' })).toHaveFocus();
+      expect(shown()).toBe('11月17日（火）：20分');
+
+      await userEvent.keyboard('{ArrowDown}{ArrowDown}');
+      expect(within(card).getByRole('button', { name: '11月19日（木）' })).toHaveFocus();
+      // 記録のない、これからの日は日付だけ
+      expect(shown()).toBe('11月19日（木）');
+    });
+
+    it('左右の矢印キーで1週ずつ動く', async () => {
+      const { card } = await setup();
+      await userEvent.tab();
+
+      await userEvent.keyboard('{ArrowRight}');
+      expect(within(card).getByRole('button', { name: '11月25日（水）' })).toHaveFocus();
+
+      await userEvent.keyboard('{ArrowLeft}');
+      expect(within(card).getByRole('button', { name: '11月18日（水）：45分' })).toHaveFocus();
+    });
+
+    it('Home と End で、最初と最後の日に動く', async () => {
+      const { card } = await setup();
+      await userEvent.tab();
+
+      await userEvent.keyboard('{End}');
+      expect(within(card).getByRole('button', { name: '2月7日（日）' })).toHaveFocus();
+
+      await userEvent.keyboard('{Home}');
+      expect(within(card).getByRole('button', { name: '11月16日（月）：1時間30分' })).toHaveFocus();
+    });
+
+    it('期間の外へは動かない', async () => {
+      const { card } = await setup();
+      await userEvent.tab();
+      await userEvent.keyboard('{Home}');
+
+      // 最初の日（11/16）から、前の日・前の週へは動けない
+      await userEvent.keyboard('{ArrowUp}{ArrowLeft}');
+
+      expect(within(card).getByRole('button', { name: '11月16日（月）：1時間30分' })).toHaveFocus();
+    });
+
+    it('動いた先のマスが、次に Tab で入るマスになる', async () => {
+      const { card } = await setup();
+      await userEvent.tab();
+      await userEvent.keyboard('{ArrowUp}');
+
+      const reachable = within(card)
+        .getAllByRole('button')
+        .filter((button) => button.tabIndex === 0);
+      expect(reachable).toHaveLength(1);
+      expect(reachable[0]).toHaveAccessibleName('11月17日（火）：20分');
+    });
+
+    it('矢印キーの操作方法を、読み上げ用の説明として持つ', async () => {
+      const { card } = await setup();
+
+      expect(within(card).getByRole('group')).toHaveAccessibleDescription(
+        '上下の矢印キーで1日、左右の矢印キーで1週移動します。',
+      );
+    });
+
+    it('ページで最初に Tab で止まるのは、カレンダーのマス', async () => {
+      // グラフ自体には Tab で止まらない（同じ内容は表で読める）。
+      // テスト環境ではグラフの大きさが0で描かれないので、グラフの確認はブラウザで行う
+      renderPage();
+      await findCard('学習カレンダー');
+
+      await userEvent.tab();
+
+      expect(document.activeElement).toHaveAccessibleName('11月18日（水）：45分');
     });
   });
 
@@ -253,7 +377,9 @@ describe('StatsPage', () => {
 
       // 最終週の予定終了日は 2/7 から5日ずれて 2/12
       const card = await findCard('学習カレンダー');
-      expect(within(card).getByRole('img', { name: /から2月12日（金）まで/ })).toBeInTheDocument();
+      expect(
+        within(card).getByRole('group', { name: /から2月12日（金）まで/ }),
+      ).toBeInTheDocument();
     });
   });
 });
