@@ -26,12 +26,21 @@ export async function seedIfEmpty(today: string = todayString()): Promise<boolea
     const settings = await db.settings.get('app');
     if (settings) return false;
 
-    const roadmap = createInitialRoadmap();
-    await db.months.bulkAdd(roadmap.months);
-    await db.steps.bulkAdd(roadmap.steps);
-    await db.weeks.bulkAdd(roadmap.weeks);
-    await db.skills.bulkAdd(roadmap.skills);
-    await db.settings.add(createInitialSettings(today));
+    await writeInitialData(today);
     return true;
   });
+}
+
+/**
+ * 初期ロードマップと初期設定を書き込む。初回起動時と、全データのリセットで使う。
+ * 書き込む先のテーブルは空になっていること。months・steps・weeks・skills・settings を含む
+ * トランザクションの中で呼ぶ
+ */
+export async function writeInitialData(today: string): Promise<void> {
+  const roadmap = createInitialRoadmap();
+  await db.months.bulkAdd(roadmap.months);
+  await db.steps.bulkAdd(roadmap.steps);
+  await db.weeks.bulkAdd(roadmap.weeks);
+  await db.skills.bulkAdd(roadmap.skills);
+  await db.settings.add(createInitialSettings(today));
 }

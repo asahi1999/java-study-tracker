@@ -5,7 +5,13 @@ import { createInitialRoadmap } from '@/data/initialRoadmap';
 import type { Week } from '@/types';
 
 import { buildLog } from '../../tests/factories';
-import { type BadgeInput, evaluateBadges, getNewBadgeIds, getRecentBadges } from './badges';
+import {
+  type BadgeInput,
+  evaluateBadges,
+  FIXED_TARGET_BADGE_IDS,
+  getNewBadgeIds,
+  getRecentBadges,
+} from './badges';
 
 describe('getRecentBadges', () => {
   const earned = [
@@ -254,6 +260,31 @@ describe('evaluateBadges', () => {
     );
 
     expect(evaluateBadges(everything).size).toBe(16);
+  });
+});
+
+describe('FIXED_TARGET_BADGE_IDS', () => {
+  // 削除の確認で「獲得できなくなる」と知らせる対応表が、実際の判定とずれていないか確かめる
+  it.each(Object.entries(FIXED_TARGET_BADGE_IDS))(
+    '%s の週をすべて完成すると、バッジ %s を獲得する',
+    (targetId, badgeId) => {
+      const result = evaluateBadges(
+        input((weeks) =>
+          complete(
+            weeks,
+            weeks
+              .filter((week) => week.monthId === targetId || week.stepId === targetId)
+              .map((week) => week.id),
+          ),
+        ),
+      );
+      expect(result.has(badgeId)).toBe(true);
+    },
+  );
+
+  it('対応表のバッジはすべて定義にある', () => {
+    const ids = new Set(BADGE_DEFINITIONS.map((badge) => badge.id));
+    expect(Object.values(FIXED_TARGET_BADGE_IDS).every((id) => ids.has(id))).toBe(true);
   });
 });
 

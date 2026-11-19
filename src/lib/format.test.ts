@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import {
   formatDateRange,
+  formatDateTime,
   formatDateWithWeekday,
+  formatFullDate,
   formatHours,
   formatMinutes,
   formatShortDate,
@@ -78,5 +80,19 @@ describe('formatStepNumber', () => {
   it('丸数字がない番号は数字のまま返す', () => {
     expect(formatStepNumber(21)).toBe('21');
     expect(formatStepNumber(0)).toBe('0');
+  });
+});
+
+describe('formatFullDate', () => {
+  it('年と曜日つきの日付にする', () => {
+    expect(formatFullDate('2026-12-29')).toBe('2026年12月29日（火）');
+    expect(formatFullDate('2027-01-03')).toBe('2027年1月3日（日）');
+  });
+});
+
+describe('formatDateTime', () => {
+  it('ISO形式の日時を、ローカル時刻の年月日と時刻にする', () => {
+    // 時差のある環境でも同じ結果になるよう、ローカル時刻で作った日時を渡す
+    expect(formatDateTime(new Date(2026, 10, 19, 9, 5).toISOString())).toBe('2026年11月19日 9:05');
   });
 });

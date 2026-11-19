@@ -18,6 +18,16 @@ export function formatDateWithWeekday(value: string): string {
   return format(parseDateString(value), 'M月d日（E）', { locale: ja });
 }
 
+/** 「2026年11月19日（木）」のような、年と曜日つきの日付 */
+export function formatFullDate(value: string): string {
+  return format(parseDateString(value), 'yyyy年M月d日（E）', { locale: ja });
+}
+
+/** ISO形式の日時を、ローカル時刻の「2026年11月19日 9:05」にする */
+export function formatDateTime(iso: string): string {
+  return format(new Date(iso), 'yyyy年M月d日 H:mm');
+}
+
 /** 学習時間（分）を「45分」「2時間」「3時間20分」のように表示する */
 export function formatMinutes(minutes: number): string {
   const total = Math.max(0, Math.round(minutes));

@@ -61,6 +61,18 @@ function hasOnTimeMonth({ weeks, settings }: BadgeInput): boolean {
   });
 }
 
+/**
+ * 初期データの固定IDの月・ステップと、それで判定するバッジのID（Q12）。
+ * ロードマップ編集で月・ステップを削除するときに、獲得できなくなるバッジを知らせるために使う
+ */
+export const FIXED_TARGET_BADGE_IDS: Readonly<Record<string, string>> = {
+  'month-1': 'month-1',
+  'month-2': 'month-2',
+  'step-4': 'oop',
+  'step-5': 'sql',
+  'step-6': 'spring',
+};
+
 /** バッジのIDごとの条件。月・ステップのバッジは、初期データの固定IDで判定する（Q12） */
 const CONDITIONS: Record<string, (input: BadgeInput) => boolean> = {
   'first-log': ({ logs }) => logs.length > 0,
