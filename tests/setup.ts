@@ -8,6 +8,7 @@ import { afterEach, beforeEach, vi } from 'vitest';
 
 import { db } from '@/db/database';
 import { useTimerStore } from '@/stores/timerStore';
+import { useToastStore } from '@/stores/toastStore';
 
 import { installMatchMedia, resetMatchMedia } from './matchMedia';
 
@@ -44,6 +45,7 @@ afterEach(() => {
   resetMatchMedia();
   // 学習タイマーはアプリ全体で1つなので、次のテストに計測中の状態を持ち越さない
   useTimerStore.getState().reset();
+  useToastStore.getState().clear();
   document.title = '';
   localStorage.clear();
   // テーマのテストが <html> に付けた状態を次のテストに持ち越さない

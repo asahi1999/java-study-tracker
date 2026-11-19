@@ -1,15 +1,19 @@
 import { useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
+import { useBadgeWatcher } from '@/hooks/useBadgeWatcher';
+
 import { BottomNav } from './BottomNav';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
 import { TimerWidget } from './TimerWidget';
+import { Toaster } from './Toaster';
 
 // 全画面で共通の枠。PCは左にサイドバー、スマホは下部にタブを置き、その中にページを表示する
 export function AppLayout() {
   const mainRef = useRef<HTMLElement>(null);
   const { pathname } = useLocation();
+  useBadgeWatcher();
 
   // 画面を切り替えたら先頭から表示する。前の画面のスクロール位置が残らないようにするため
   useEffect(() => {
@@ -46,6 +50,7 @@ export function AppLayout() {
       </div>
 
       <TimerWidget />
+      <Toaster />
       <BottomNav />
     </div>
   );

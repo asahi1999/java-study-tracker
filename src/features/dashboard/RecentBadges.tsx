@@ -1,8 +1,8 @@
-import { Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { Card } from '@/components/ui/Card';
 import { BADGE_DEFINITIONS } from '@/data/badges';
+import { BadgeStamp } from '@/features/badges/BadgeStamp';
 import { getRecentBadges } from '@/lib/badges';
 import { toDateString } from '@/lib/date';
 import { formatDateWithWeekday } from '@/lib/format';
@@ -31,12 +31,7 @@ export function RecentBadges({ earned }: { earned: readonly EarnedBadge[] }) {
         <ul className="grid gap-3">
           {badges.map((badge) => (
             <li key={badge.id} className="flex items-center gap-3">
-              <span
-                aria-hidden
-                className="flex size-9 shrink-0 items-center justify-center rounded-full bg-accent text-accent-ink"
-              >
-                <Award className="size-5" strokeWidth={2} />
-              </span>
+              <BadgeStamp id={badge.id} earned size="sm" />
               <div className="min-w-0 leading-snug">
                 <p className="text-sm font-bold">{badge.name}</p>
                 <p className="text-[13px] text-muted">
