@@ -15,8 +15,9 @@ import { installMatchMedia, resetMatchMedia } from './matchMedia';
 installMatchMedia();
 
 // 画面の更新を待つ時間の上限。標準の1秒だと、テストを並列で動かして負荷が高いときに
-// データベースの読み込みが間に合わず、たまに失敗することがあるため長めにしている
-configure({ asyncUtilTimeout: 5000 });
+// データベースの読み込みが間に合わず、たまに失敗することがあるため長めにしている。
+// 1件のテストの上限（vite.config.ts の testTimeout：30秒）より短くしておく
+configure({ asyncUtilTimeout: 10_000 });
 
 // jsdom は window.scrollTo を実装しておらず、呼ぶとコンソールにエラーが出るので空の関数にする
 window.scrollTo = () => {};

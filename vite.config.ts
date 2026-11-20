@@ -24,6 +24,12 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./tests/setup.ts'],
+    // 1件のテストの上限時間。初期値の5秒では、ほかの処理でパソコンが忙しいときに、
+    // IndexedDB を使う画面のテストが時間切れで失敗することがあった（負荷を3倍にすると1件で最大14秒）。
+    // 画面の更新を待つ上限（tests/setup.ts の asyncUtilTimeout）より十分長くし、
+    // 待っている途中でテストごと打ち切られないようにする
+    testTimeout: 30_000,
+    hookTimeout: 30_000,
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],
