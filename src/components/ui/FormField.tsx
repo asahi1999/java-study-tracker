@@ -2,6 +2,12 @@ import { type ReactNode, useId } from 'react';
 
 import { ERROR_CLASS, LABEL_CLASS } from './field';
 
+/**
+ * 設定画面などで入力欄を横に並べるときの並べ方。スマホは2列、PCは3列にして、
+ * 画面ごとに入力欄の幅がばらばらにならないようにする
+ */
+export const FIELD_GRID_CLASS = 'grid grid-cols-2 gap-x-3 gap-y-4 sm:grid-cols-3';
+
 /** 入力欄に渡す属性。ラベル・補足・エラーとのつながりを持つ */
 export type FieldControlProps = {
   id: string;

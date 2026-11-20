@@ -47,7 +47,11 @@ export function MonthList({ months, weeks }: MonthListProps) {
       }
     >
       {months.length === 0 ? (
-        <EmptyState icon={CalendarRange} title="月がまだありません" />
+        <EmptyState
+          icon={CalendarRange}
+          title="月がまだありません"
+          description="「月を追加」から追加してください。週は、どれかの月に入れる必要があります。"
+        />
       ) : (
         <ul className="-mx-4 -mb-4 divide-y divide-line border-t border-line sm:-mx-5 sm:-mb-5">
           {months.map((month) => {

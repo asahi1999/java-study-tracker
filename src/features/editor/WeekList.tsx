@@ -66,7 +66,11 @@ export function WeekList({ months, steps, weeks, skills }: WeekListProps) {
       </p>
 
       {weeks.length === 0 ? (
-        <EmptyState icon={CalendarRange} title="週がまだありません" />
+        <EmptyState
+          icon={CalendarRange}
+          title="週がまだありません"
+          description="「週を追加」から、作るものと週番号を入れて追加してください。"
+        />
       ) : (
         <ol className="-mx-4 -mb-4 divide-y divide-line border-t border-line sm:-mx-5 sm:-mb-5">
           {weeks.map((week, position) => (

@@ -51,7 +51,11 @@ export function StepList({ steps, weeks }: StepListProps) {
         番号（①②…）は追加した順に付きます。削除しても、ほかのステップの番号は変わりません。
       </p>
       {steps.length === 0 ? (
-        <EmptyState icon={Layers} title="ステップがまだありません" />
+        <EmptyState
+          icon={Layers}
+          title="ステップがまだありません"
+          description="「ステップを追加」から追加してください。週は、どれかのステップに入れる必要があります。"
+        />
       ) : (
         <ul className="-mx-4 -mb-4 divide-y divide-line border-t border-line sm:-mx-5 sm:-mb-5">
           {steps.map((step) => {

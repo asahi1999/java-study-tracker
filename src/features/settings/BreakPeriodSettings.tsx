@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { ERROR_CLASS, INPUT_CLASS } from '@/components/ui/field';
-import { FormField } from '@/components/ui/FormField';
+import { FIELD_GRID_CLASS, FormField } from '@/components/ui/FormField';
 import { settingsRepository } from '@/db/repositories';
 import { diffInDays } from '@/lib/date';
 import { formatFullDate } from '@/lib/format';
@@ -116,20 +116,20 @@ function AddBreakPeriodForm({ periods }: { periods: readonly BreakPeriod[] }) {
       aria-label="休止期間を追加"
       className="mt-4 grid gap-3 border-t border-line pt-4"
     >
-      <FormField label="名前" error={errors.label}>
-        {(control) => (
-          <input
-            {...control}
-            type="text"
-            maxLength={BREAK_LABEL_MAX}
-            placeholder="例：年末年始"
-            value={values.label}
-            onChange={(event) => setValue('label', event.target.value)}
-            className={`${INPUT_CLASS} sm:max-w-80`}
-          />
-        )}
-      </FormField>
-      <div className="grid grid-cols-2 gap-3 sm:max-w-md">
+      <div className={FIELD_GRID_CLASS}>
+        <FormField label="名前" error={errors.label} className="col-span-2 sm:col-span-1">
+          {(control) => (
+            <input
+              {...control}
+              type="text"
+              maxLength={BREAK_LABEL_MAX}
+              placeholder="例：年末年始"
+              value={values.label}
+              onChange={(event) => setValue('label', event.target.value)}
+              className={INPUT_CLASS}
+            />
+          )}
+        </FormField>
         <FormField label="開始日" error={errors.start}>
           {(control) => (
             <input

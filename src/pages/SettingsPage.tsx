@@ -16,8 +16,7 @@ export function SettingsPage() {
   return (
     <>
       <PageHeader title="設定" />
-      {/* 入力欄が横に伸びすぎないよう、幅を絞る */}
-      <div className="grid max-w-3xl gap-4">
+      <div className="grid gap-4">
         <ThemeSetting />
         {settings ? (
           <>

@@ -3,7 +3,7 @@ import { type FormEvent, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { INPUT_CLASS } from '@/components/ui/field';
-import { FormField } from '@/components/ui/FormField';
+import { FIELD_GRID_CLASS, FormField } from '@/components/ui/FormField';
 import { settingsRepository } from '@/db/repositories';
 import { scheduleSettingsSchema } from '@/lib/settingsValidation';
 import { getFieldErrors } from '@/lib/validation';
@@ -72,23 +72,24 @@ function ScheduleForm({ initialValues, saved, onSaved, onEdit }: ScheduleFormPro
 
   return (
     <form onSubmit={handleSubmit} noValidate className="grid gap-4">
-      <FormField
-        label="学習開始日"
-        hint="変更すると、すべての週の予定日が計算し直されます。"
-        error={errors.startDate}
-      >
-        {(control) => (
-          <input
-            {...control}
-            type="date"
-            value={values.startDate}
-            onChange={(event) => setValue('startDate', event.target.value)}
-            className={`${INPUT_CLASS} sm:max-w-60`}
-          />
-        )}
-      </FormField>
-
-      <div className="grid gap-4 sm:grid-cols-2">
+      {/* 入力欄の幅は、休止期間の欄と同じ並べ方（スマホは2列、PCは3列）にそろえる */}
+      <div className={FIELD_GRID_CLASS}>
+        <FormField
+          label="学習開始日"
+          hint="変更すると、すべての週の予定日が計算し直されます。"
+          error={errors.startDate}
+          className="col-span-2 sm:col-span-1"
+        >
+          {(control) => (
+            <input
+              {...control}
+              type="date"
+              value={values.startDate}
+              onChange={(event) => setValue('startDate', event.target.value)}
+              className={INPUT_CLASS}
+            />
+          )}
+        </FormField>
         <FormField label="週の目標（時間）" error={errors.weeklyGoalHours}>
           {(control) => (
             <input
