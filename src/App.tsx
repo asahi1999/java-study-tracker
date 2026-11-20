@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 
 import { AppLayout } from '@/components/layout/AppLayout';
@@ -5,15 +6,28 @@ import { ErrorScreen } from '@/components/ui/ErrorScreen';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
 import { useAppBootstrap } from '@/hooks/useAppBootstrap';
 import { useApplyTheme } from '@/hooks/useTheme';
-import { BadgesPage } from '@/pages/BadgesPage';
 import { DashboardPage } from '@/pages/DashboardPage';
-import { EditorPage } from '@/pages/EditorPage';
-import { LogsPage } from '@/pages/LogsPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
-import { RoadmapPage } from '@/pages/RoadmapPage';
-import { SettingsPage } from '@/pages/SettingsPage';
-import { StatsPage } from '@/pages/StatsPage';
-import { WeekDetailPage } from '@/pages/WeekDetailPage';
+
+// 最初に開くダッシュボード以外のページは、開いたときに読み込む。
+// グラフ（統計）や Markdown（週の詳細）のライブラリが大きく、全部を最初に読み込むと表示が遅くなるため
+const RoadmapPage = lazy(() =>
+  import('@/pages/RoadmapPage').then((m) => ({ default: m.RoadmapPage })),
+);
+const WeekDetailPage = lazy(() =>
+  import('@/pages/WeekDetailPage').then((m) => ({ default: m.WeekDetailPage })),
+);
+const LogsPage = lazy(() => import('@/pages/LogsPage').then((m) => ({ default: m.LogsPage })));
+const StatsPage = lazy(() => import('@/pages/StatsPage').then((m) => ({ default: m.StatsPage })));
+const BadgesPage = lazy(() =>
+  import('@/pages/BadgesPage').then((m) => ({ default: m.BadgesPage })),
+);
+const EditorPage = lazy(() =>
+  import('@/pages/EditorPage').then((m) => ({ default: m.EditorPage })),
+);
+const SettingsPage = lazy(() =>
+  import('@/pages/SettingsPage').then((m) => ({ default: m.SettingsPage })),
+);
 
 /** URLと画面の対応。テストでは別のルーターで包んで使うため、ルーター本体とは分けている */
 export function AppRoutes() {

@@ -54,7 +54,8 @@ describe('AppRoutes', () => {
 
     await user.click(within(menu).getByRole('link', { name: '統計' }));
 
-    expect(screen.getByRole('heading', { level: 1, name: '統計' })).toBeInTheDocument();
+    // ダッシュボード以外のページは開いたときに読み込むので、表示されるまで待つ
+    expect(await screen.findByRole('heading', { level: 1, name: '統計' })).toBeInTheDocument();
   });
 
   it('路線バーの駅から、その週の詳細へ移動できる', async () => {

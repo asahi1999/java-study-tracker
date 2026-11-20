@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
+import { LoadingText } from '@/components/ui/LoadingText';
 import { useBadgeWatcher } from '@/hooks/useBadgeWatcher';
 
 import { BottomNav } from './BottomNav';
@@ -45,7 +46,10 @@ export function AppLayout() {
           // その高さ（＋端末下部の安全領域）より広く下の余白を取っている
           className="mx-auto w-full max-w-5xl flex-1 px-4 pb-[calc(9rem+env(safe-area-inset-bottom))] pt-5 outline-none md:px-8 md:pb-10 md:pt-7"
         >
-          <Outlet />
+          {/* ページのプログラムを読み込んでいる間も、サイドバーやタブは出したままにする */}
+          <Suspense fallback={<LoadingText />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
 
