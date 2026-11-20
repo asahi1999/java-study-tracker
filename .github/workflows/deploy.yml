@@ -1,0 +1,65 @@
+# main の CI が通ったら、ビルドして GitHub Pages に公開する。
+# CI と同時に動かすと、テストが落ちたコミットまで公開されてしまうため、CI の完了を待つ
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  # Actions の画面から手動でも公開できるようにする
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 公開は同時に1つだけにする。途中の公開は止めずに最後まで終わらせる
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: ビルド
+    # main への push で CI が成功したときだけ公開する（pull request の CI では公開しない）
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # CI が確かめたコミットを公開する（そのあとに push されたコミットではなく）
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: 依存パッケージのインストール
+        run: npm ci
+
+      - name: ビルド
+        run: npm run build
+
+      - name: 公開するファイルをまとめる
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    name: GitHub Pages に公開
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

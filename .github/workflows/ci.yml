@@ -1,0 +1,46 @@
+# push と pull request のたびに、lint・整形・型チェック・テスト・ビルドを確かめる
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# 同じブランチに続けて push したら、古いほうの実行は止める
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: lint・型チェック・テスト・ビルド
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      # Node.js のバージョンは .nvmrc（24）にそろえる
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: 依存パッケージのインストール
+        run: npm ci
+
+      - name: lint
+        run: npm run lint
+
+      - name: 整形の確認
+        run: npm run format:check
+
+      - name: 型チェック
+        run: npm run typecheck
+
+      - name: テスト
+        run: npm test
+
+      - name: ビルド
+        run: npm run build
