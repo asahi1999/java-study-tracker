@@ -158,6 +158,18 @@ describe('LogsPage', () => {
       expect(rows[0]).toHaveTextContent('HTMLの基本');
     });
 
+    it('期間を入力すると、その期間のログだけにする', async () => {
+      renderPage();
+      await findRows();
+
+      await userEvent.type(screen.getByLabelText('期間（開始）'), '2026-11-18');
+      expect(await findRows()).toHaveLength(2);
+
+      await userEvent.type(screen.getByLabelText('期間（終了）'), '2026-11-17');
+      // 開始より前の終了日は、条件に合うログがない
+      expect(await screen.findByText(/条件に合う学習ログはありません/)).toBeInTheDocument();
+    });
+
     it('URLの条件（期間）で絞り込んだ状態で開ける', async () => {
       renderPage('/logs?from=2026-11-17&to=2026-11-17');
 
