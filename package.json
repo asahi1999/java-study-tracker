@@ -1,7 +1,7 @@
 {
   "name": "java-study-tracker",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Java学習の3ヶ月ロードマップを管理する学習トラッカー",
   "type": "module",
   "engines": {
