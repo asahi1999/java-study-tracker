@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>4-5 壁にぶつかる — Java ダンジョン工房</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DotGothic16&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="problem.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="home.html" aria-label="ホームへ">
+        <span data-tiles="*" data-size="24" aria-hidden="true"></span>
+      </a>
+      <nav class="crumbs" aria-label="現在地">
+        <a href="home.html">ホーム</a><span class="sep">/</span> <span>第4章 配列</span
+        ><span class="sep">/</span>
+        <strong>4-5 壁にぶつかる</strong>
+      </nav>
+      <div class="step-meta">
+        <span class="chip">ステップ 2 / 3</span>
+        <span class="chip time">約2分</span>
+        <span class="saved">自動保存済み</span>
+        <div class="level" aria-label="レベル 7">
+          <span class="level-num">Lv 7</span>
+          <span class="pips" aria-hidden="true"
+            ><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i
+            ><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i
+          ></span>
+        </div>
+      </div>
+    </header>
+
+    <main class="work">
+      <!-- 左：問題文 -->
+      <div class="col brief">
+        <p class="eyebrow torch">実装</p>
+        <h1><code>canMove</code> を書いて、壁の前で止まる</h1>
+        <p>
+          迷路の文字 <code>#</code> は壁です。<code>canMove(map, x, y)</code>
+          が、そのマスに進めるなら <code>true</code>、壁なら
+          <code>false</code> を返すようにしてください。
+        </p>
+        <p class="note">
+          <code>map[y][x]</code> で、そのマスの1文字が取れます（y
+          が先）。迷路の外側は全部壁なので、はみ出しは気にしなくて大丈夫です。
+        </p>
+
+        <div class="hints">
+          <h2>ヒント</h2>
+          <div class="hint">
+            <b>ヒント 1</b>壁かどうかは「そのマスの文字が <code>'#'</code> かどうか」で決まります。
+          </div>
+          <button class="hint-btn" type="button">ヒント 2 を見る <small>書き方の形</small></button>
+          <button class="hint-btn" type="button" disabled>
+            ヒント 3 <small>答えに近い・2 のあとで</small>
+          </button>
+        </div>
+
+        <div class="helpers">
+          <button class="helper" type="button">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 8 8"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                fill="#b8a2f2"
+                d="M1 1h6v1H1zM0 2h1v3H0zM7 2h1v3H7zM1 5h3v1H1zM5 5h2v1H5zM4 6h1v1H4zM2 3h1v1H2zM4 3h1v1H4z"
+              />
+            </svg>
+            <b>質問文を作る</b>
+            <small>問題・自分のコード・出力をまとめてコピー。チャットに貼るだけ</small>
+          </button>
+          <button class="helper" type="button">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 8 8"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                fill="#86c79f"
+                d="M0 1h8v1H0zM0 2h1v5H0zM7 2h1v5H7zM0 7h8v1H0zM2 3h1v1H2zM3 4h1v1H3zM2 5h1v1H2zM4 5h2v1H4z"
+              />
+            </svg>
+            <b>手元で実行</b>
+            <small>VS Code と JDK 25 で動かして、出力を貼る</small>
+          </button>
+        </div>
+      </div>
+
+      <!-- 中：エディタ -->
+      <div class="col editor">
+        <div class="tabs">
+          <span class="tab">Main.java</span>
+          <span class="spacer"></span>
+          <button class="tool" type="button">最初のコードに戻す</button>
+        </div>
+        <pre
+          class="code"
+          aria-label="Java のコード"
+        ><p class="editor-note">▼ 書くのはここ（2行目）</p><span class="l"><span class="t">boolean</span> <span class="f">canMove</span>(<span class="t">char</span>[][] map, <span class="t">int</span> x, <span class="t">int</span> y) {</span><span class="l edit">    <span class="k">return</span> map[y][x] != <span class="s">'#'</span>;<span class="caret"></span></span><span class="l">}</span><span class="l"></span><span class="l"><span class="t">void</span> <span class="f">main</span>() {</span><span class="l">    <span class="t">String</span>[] rows = {</span><span class="l">        <span class="s">"#########"</span>,</span><span class="l">        <span class="s">"#...#...#"</span>,</span><span class="l">        <span class="s">"#.#.#.#.#"</span>,</span><span class="l">        <span class="s">"#.#...#G#"</span>,</span><span class="l">        <span class="s">"#########"</span>,</span><span class="l">    };</span><span class="fold">▸ 13〜30行：迷路を <code>char[][]</code> にして、<code>"RRDDRRUURRDD"</code> の順に歩く（読むだけ）</span><span class="l" style="counter-set: ln 30">    map[y][x] = <span class="s">'@'</span>;</span><span class="l">    <span class="k">for</span> (<span class="t">char</span>[] row : map) {</span><span class="l">        <span class="t">IO</span>.<span class="f">println</span>(<span class="k">new</span> <span class="t">String</span>(row));</span><span class="l">    }</span><span class="l">}</span></pre>
+        <div class="runbar">
+          <button class="btn primary" type="button">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 7 7"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path fill="currentColor" d="M1 0h1v7H1zM2 1h1v5H2zM3 2h1v3H3zM4 3h1v1H4z" />
+            </svg>
+            実行 <kbd>⌘ Enter</kbd>
+          </button>
+          <span class="status ok">コンパイル OK ・ 実行 0.7 秒</span>
+        </div>
+      </div>
+
+      <!-- 右：結果 -->
+      <div class="col result">
+        <section aria-labelledby="t-title">
+          <h2 id="t-title">テスト <small>4 本の松明が全部ともった</small></h2>
+          <ul class="torches">
+            <li class="lit">
+              <span class="t" data-tiles="*" data-size="40"></span
+              ><span>壁 <code>#</code> には<br />入れない</span>
+            </li>
+            <li class="lit">
+              <span class="t" data-tiles="*" data-size="40"></span
+              ><span>床 <code>.</code> は<br />通れる</span>
+            </li>
+            <li class="lit">
+              <span class="t" data-tiles="*" data-size="40"></span
+              ><span>階段 <code>G</code> も<br />通れる</span>
+            </li>
+            <li class="lit">
+              <span class="t" data-tiles="*" data-size="40"></span
+              ><span>歩き終わりの<br />地図が一致</span>
+            </li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="o-title">
+          <h2 id="o-title">出力 <small>文字 → タイル</small></h2>
+          <div class="out">
+            <pre class="src">#########
+#...#...#
+#.#.#.#.#
+#.#...#<span style="color:var(--torch-hi)">@</span>#
+#########</pre>
+            <div
+              class="tiles"
+              data-tiles="#########|#...#...#|#.#.#.#.#|#.#...#@#|#########"
+              data-size="24"
+              aria-label="出力のタイル表示。自分 @ が右下の階段の位置にいる"
+            ></div>
+          </div>
+          <p class="out-cap">手元の VS Code で動かしても、左と同じ文字が出ます。</p>
+        </section>
+
+        <div class="clear" role="status">
+          <div class="title">ステップクリア</div>
+          <p>@ が壁の前で止まり、階段まで歩けました。Lv 8 まであと 3 ステップ。</p>
+          <div class="row">
+            <a class="btn primary" href="#">次のステップへ（約3分）</a>
+            <a class="btn ghost" href="home.html">ここで終える</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="tiles.js"></script>
+  </body>
+</html>

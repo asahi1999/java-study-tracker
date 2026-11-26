@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>4-5 壁にぶつかる（エラー） — Java ダンジョン工房</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DotGothic16&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="problem.css" />
+    <style>
+      .lens {
+        display: block;
+        margin: 2px 0 4px 52px;
+        padding: 4px 10px;
+        width: fit-content;
+        font-family: var(--font-body);
+        font-size: 12px;
+        color: #ffd9cc;
+        background: #3a2226;
+        box-shadow: inset 2px 0 0 var(--ember);
+      }
+      .lens b {
+        color: var(--ember);
+        font-weight: 500;
+        margin-right: 6px;
+      }
+      .lens code {
+        font-size: 12px;
+      }
+
+      .found {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: var(--s4);
+        align-items: center;
+        margin: var(--s4) var(--s5) 0;
+        padding: var(--s4) var(--s4) var(--s4);
+        background:
+          radial-gradient(120% 140% at 0% 0%, rgba(184, 162, 242, 0.22), transparent 55%), #221d36;
+        box-shadow: inset 0 0 0 2px #6a5aa8;
+        clip-path: var(--notch-4);
+        overflow: hidden;
+      }
+      .found::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -40%;
+        width: 30%;
+        background: linear-gradient(90deg, transparent, rgba(241, 235, 255, 0.1), transparent);
+        animation: sweep 2.6s ease-out 0.3s 1 both;
+        pointer-events: none;
+      }
+      @keyframes sweep {
+        from {
+          left: -40%;
+        }
+        to {
+          left: 120%;
+        }
+      }
+      .sigil {
+        filter: drop-shadow(0 0 10px rgba(184, 162, 242, 0.45));
+      }
+      .found p {
+        margin: 0;
+      }
+      .found-eyebrow {
+        font-family: var(--font-display);
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        color: var(--rune);
+      }
+      .found-name {
+        font-family: var(--font-display);
+        font-size: 22px;
+        line-height: 1.35;
+        color: #f1ebff;
+      }
+      .found-name span {
+        font-size: 14px;
+        color: var(--rune);
+        margin-right: 6px;
+      }
+      .found-sub {
+        font-size: 12px;
+        color: var(--text-dim);
+        line-height: 1.55;
+        margin-top: 4px !important;
+      }
+      .found-sub code {
+        font-size: 11px;
+        color: #d6cbf7;
+      }
+      .found-link {
+        position: absolute;
+        top: 14px;
+        right: 16px;
+        font-size: 12px;
+        color: var(--rune);
+      }
+
+      .explain {
+        margin: 0;
+        display: grid;
+        gap: 4px;
+      }
+      .explain dt {
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--ember);
+        letter-spacing: 0.06em;
+      }
+      .explain dd {
+        margin: 0 0 var(--s2);
+        font-size: 13.5px;
+        line-height: 1.7;
+      }
+      .explain code,
+      .found code {
+        white-space: nowrap;
+      }
+      .explain code {
+        font-size: 12.5px;
+        background: var(--stone-950);
+        padding: 1px 5px;
+      }
+      .raw summary {
+        font-size: 12px;
+        color: var(--text-dim);
+        cursor: pointer;
+        margin-bottom: 6px;
+      }
+      .raw pre {
+        margin: 0;
+        padding: var(--s3);
+        font-size: 11px;
+        line-height: 1.55;
+        color: #e9c3b6;
+        background: var(--stone-950);
+        overflow: auto;
+      }
+      .torches.small li {
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: left;
+        gap: 6px;
+        font-size: 12px;
+      }
+      .torches.small {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px var(--s3);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="home.html" aria-label="ホームへ">
+        <span data-tiles="*" data-size="24" aria-hidden="true"></span>
+      </a>
+      <nav class="crumbs" aria-label="現在地">
+        <a href="home.html">ホーム</a><span class="sep">/</span> <span>第4章 配列</span
+        ><span class="sep">/</span>
+        <strong>4-5 壁にぶつかる</strong>
+      </nav>
+      <div class="step-meta">
+        <span class="chip">ステップ 2 / 3</span>
+        <span class="chip time">約2分</span>
+        <span class="saved">自動保存済み</span>
+        <div class="level" aria-label="レベル 7">
+          <span class="level-num">Lv 7</span>
+          <span class="pips" aria-hidden="true"
+            ><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i
+            ><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i
+          ></span>
+        </div>
+      </div>
+    </header>
+
+    <main class="work">
+      <!-- 左：問題文 -->
+      <div class="col brief">
+        <p class="eyebrow torch">実装</p>
+        <h1><code>canMove</code> を書いて、壁の前で止まる</h1>
+        <p>
+          迷路の文字 <code>#</code> は壁です。<code>canMove(map, x, y)</code>
+          が、そのマスに進めるなら <code>true</code>、壁なら
+          <code>false</code> を返すようにしてください。
+        </p>
+        <p class="note">
+          <code>map[y][x]</code> で、そのマスの1文字が取れます（y
+          が先）。迷路の外側は全部壁なので、はみ出しは気にしなくて大丈夫です。
+        </p>
+
+        <div class="hints">
+          <h2>ヒント</h2>
+          <div class="hint">
+            <b>ヒント 1</b>壁かどうかは「そのマスの文字が <code>'#'</code> かどうか」で決まります。
+          </div>
+          <button class="hint-btn" type="button">ヒント 2 を見る <small>書き方の形</small></button>
+          <button class="hint-btn" type="button" disabled>
+            ヒント 3 <small>答えに近い・2 のあとで</small>
+          </button>
+        </div>
+
+        <div class="helpers">
+          <button class="helper" type="button">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 8 8"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                fill="#b8a2f2"
+                d="M1 1h6v1H1zM0 2h1v3H0zM7 2h1v3H7zM1 5h3v1H1zM5 5h2v1H5zM4 6h1v1H4zM2 3h1v1H2zM4 3h1v1H4z"
+              />
+            </svg>
+            <b>質問文を作る</b>
+            <small>問題・自分のコード・出力をまとめてコピー。チャットに貼るだけ</small>
+          </button>
+          <button class="helper" type="button">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 8 8"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                fill="#86c79f"
+                d="M0 1h8v1H0zM0 2h1v5H0zM7 2h1v5H7zM0 7h8v1H0zM2 3h1v1H2zM3 4h1v1H3zM2 5h1v1H2zM4 5h2v1H4z"
+              />
+            </svg>
+            <b>手元で実行</b>
+            <small>VS Code と JDK 25 で動かして、出力を貼る</small>
+          </button>
+        </div>
+      </div>
+
+      <!-- 中：エディタ -->
+      <div class="col editor">
+        <div class="tabs">
+          <span class="tab">Main.java</span>
+          <span class="spacer"></span>
+          <button class="tool" type="button">最初のコードに戻す</button>
+        </div>
+        <pre
+          class="code"
+          aria-label="Java のコード"
+        ><p class="editor-note">▼ 書くのはここ（2行目）</p><span class="l"><span class="t">boolean</span> <span class="f">canMove</span>(<span class="t">char</span>[][] map, <span class="t">int</span> x, <span class="t">int</span> y) {</span><span class="l edit err">    <span class="k">return</span> map[y][x] <span class="squig">!= <span class="s">"#"</span></span>;<span class="caret"></span></span><span class="lens"><b>2行目</b> char（1文字）と String（文字列）は <code>!=</code> で比べられません</span><span class="l">}</span><span class="l"></span><span class="l"><span class="t">void</span> <span class="f">main</span>() {</span><span class="l">    <span class="t">String</span>[] rows = {</span><span class="l">        <span class="s">"#########"</span>,</span><span class="l">        <span class="s">"#...#...#"</span>,</span><span class="l">        <span class="s">"#.#.#.#.#"</span>,</span><span class="l">        <span class="s">"#.#...#G#"</span>,</span><span class="l">        <span class="s">"#########"</span>,</span><span class="l">    };</span><span class="fold">▸ 13〜30行：迷路を <code>char[][]</code> にして、<code>"RRDDRRUURRDD"</code> の順に歩く（読むだけ）</span><span class="l" style="counter-set: ln 30">    map[y][x] = <span class="s">'@'</span>;</span><span class="l">    <span class="k">for</span> (<span class="t">char</span>[] row : map) {</span><span class="l">        <span class="t">IO</span>.<span class="f">println</span>(<span class="k">new</span> <span class="t">String</span>(row));</span><span class="l">    }</span><span class="l">}</span></pre>
+        <div class="runbar">
+          <button class="btn primary" type="button">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 7 7"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path fill="currentColor" d="M1 0h1v7H1zM2 1h1v5H2zM3 2h1v3H3zM4 3h1v1H4z" />
+            </svg>
+            実行 <kbd>⌘ Enter</kbd>
+          </button>
+          <span class="status bad">コンパイルエラー 1件（2行目）</span>
+        </div>
+      </div>
+
+      <!-- 右：結果 -->
+      <div class="col result">
+        <div class="found" role="status">
+          <div class="sigil" aria-hidden="true">
+            <svg width="56" height="56" viewBox="0 0 14 14" shape-rendering="crispEdges">
+              <path
+                fill="#4d4180"
+                d="M2 0h10v1H2zM1 1h1v1H1zM12 1h1v1h-1zM0 2h1v10H0zM13 2h1v10h-1zM1 12h1v1H1zM12 12h1v1h-1zM2 13h10v1H2z"
+              />
+              <path
+                fill="#b8a2f2"
+                d="M3 4h8v1H3zM3 8h8v1H3zM8 2h1v1H8zM7 3h1v1H7zM7 5h1v1H7zM6 6h1v2H6zM5 9h1v1H5zM5 10h1v1H5z"
+              />
+              <path fill="#f1ebff" d="M2 2h1v1H2zM11 11h1v1h-1z" />
+            </svg>
+          </div>
+          <div>
+            <p class="found-eyebrow">エラー図鑑に新しく発見</p>
+            <p class="found-name"><span>No.06</span> 型ちがいの比較</p>
+            <p class="found-sub">
+              <code>bad operand types for binary operator</code
+              ><br />直してテストが通ると「捕獲」になります
+            </p>
+          </div>
+          <a class="found-link" href="#">図鑑で見る</a>
+        </div>
+
+        <section aria-labelledby="e-title">
+          <h2 id="e-title">エラーの説明 <small>コンパイルの段階で止まりました</small></h2>
+          <dl class="explain">
+            <dt>何が起きた</dt>
+            <dd>
+              2行目で、<code>map[y][x]</code>（<code>char</code>・1文字）と
+              <code>"#"</code>（<code>String</code>・文字列）を <code>!=</code> で比べています。Java
+              では、この2つの型は比べられません。
+            </dd>
+            <dt>よくある原因</dt>
+            <dd>
+              1文字は <code>' '</code>（シングルクォート）、文字列は
+              <code>" "</code>（ダブルクォート）で囲みます。囲み方で型が変わります。
+            </dd>
+          </dl>
+          <details class="raw" open>
+            <summary>Java が出した元のメッセージ</summary>
+            <pre>
+Main.java:2: error: bad operand types for binary operator '!='
+    return map[y][x] != "#";
+                     ^
+  first type:  char
+  second type: String
+1 error</pre>
+          </details>
+        </section>
+
+        <section aria-labelledby="t-title">
+          <h2 id="t-title">テスト <small>コンパイルが通ると松明に火が入ります</small></h2>
+          <ul class="torches small">
+            <li>
+              <span class="t" data-tiles="*" data-size="28" data-unlit></span
+              ><span>壁 <code>#</code></span>
+            </li>
+            <li>
+              <span class="t" data-tiles="*" data-size="28" data-unlit></span
+              ><span>床 <code>.</code></span>
+            </li>
+            <li>
+              <span class="t" data-tiles="*" data-size="28" data-unlit></span
+              ><span>階段 <code>G</code></span>
+            </li>
+            <li>
+              <span class="t" data-tiles="*" data-size="28" data-unlit></span
+              ><span>地図の一致</span>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script src="tiles.js"></script>
+  </body>
+</html>

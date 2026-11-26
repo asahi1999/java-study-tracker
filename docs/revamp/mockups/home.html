@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ホーム — Java ダンジョン工房</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DotGothic16&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .home {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: var(--s6) var(--s6) var(--s7);
+        display: grid;
+        grid-template-columns: 460px minmax(0, 1fr);
+        gap: var(--s5);
+      }
+
+      /* 次の1ステップ */
+      .next {
+        padding: var(--s6);
+        border-color: #5a4526;
+        background:
+          linear-gradient(180deg, rgba(244, 168, 61, 0.07), rgba(244, 168, 61, 0) 60%),
+          var(--stone-850);
+        display: flex;
+        flex-direction: column;
+      }
+      .where {
+        font-size: 13px;
+        color: var(--text-dim);
+        margin: 0 0 var(--s2);
+      }
+      .where b {
+        color: var(--parchment);
+        font-weight: 500;
+      }
+      .next h1 {
+        font-family: var(--font-display);
+        font-weight: 400;
+        font-size: 30px;
+        line-height: 1.35;
+        letter-spacing: 0.02em;
+        margin: 0 0 var(--s3);
+      }
+      .next h1 code {
+        font-family: var(--font-code);
+        font-weight: 600;
+        font-size: 27px;
+        color: var(--torch-hi);
+      }
+      .next p.what {
+        margin: 0 0 var(--s4);
+        color: var(--text-dim);
+      }
+      .next p.what code {
+        color: var(--parchment);
+        background: var(--stone-950);
+        padding: 1px 6px;
+        font-size: 13px;
+      }
+      .chips {
+        display: flex;
+        gap: var(--s2);
+        margin-bottom: var(--s5);
+      }
+
+      .goal {
+        display: flex;
+        gap: var(--s4);
+        align-items: center;
+        padding: var(--s3) var(--s4);
+        background: var(--stone-950);
+        margin-bottom: var(--s5);
+      }
+      .goal .label {
+        font-size: 12px;
+        color: var(--text-dim);
+        line-height: 1.6;
+      }
+      .goal .label b {
+        display: block;
+        color: var(--parchment);
+        font-weight: 500;
+        font-size: 13px;
+      }
+
+      .start-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--s3);
+      }
+      .start-row .btn.big {
+        min-width: 200px;
+      }
+      .okay {
+        font-size: 13px;
+        color: var(--text-dim);
+        line-height: 1.6;
+      }
+      .okay b {
+        color: var(--moss);
+        font-weight: 500;
+      }
+
+      .steps {
+        display: flex;
+        align-items: center;
+        gap: var(--s2);
+        margin-top: auto;
+        padding-top: var(--s5);
+        font-size: 12px;
+        color: var(--text-faint);
+      }
+      .steps ol {
+        display: flex;
+        gap: 6px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .steps li {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px 4px 8px;
+        background: var(--stone-800);
+        color: var(--text-dim);
+      }
+      .steps li::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        background: var(--stone-500);
+      }
+      .steps li.done::before {
+        background: var(--moss);
+      }
+      .steps li.now {
+        color: var(--parchment);
+        box-shadow: inset 0 0 0 2px var(--torch);
+      }
+      .steps li.now::before {
+        background: var(--torch);
+      }
+
+      .timepick {
+        font-size: 12px;
+        color: var(--text-faint);
+        margin-top: var(--s3);
+      }
+      .timepick button {
+        font: inherit;
+        color: var(--text-dim);
+        background: none;
+        border: 0;
+        padding: 0 2px;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        cursor: pointer;
+      }
+
+      /* 作品 */
+      .work {
+        padding: var(--s5) var(--s6) var(--s5);
+      }
+      .work-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: var(--s4);
+      }
+      .work-head h2 {
+        font-family: var(--font-display);
+        font-weight: 400;
+        font-size: 20px;
+        margin: 0;
+      }
+      .work-head h2 span {
+        font-family: var(--font-code);
+        font-size: 13px;
+        color: var(--torch);
+        margin-left: var(--s2);
+      }
+      .work-head a {
+        font-size: 13px;
+        color: var(--text-dim);
+      }
+
+      .board {
+        background: var(--stone-950);
+        padding: var(--s4);
+        display: flex;
+        justify-content: center;
+        position: relative;
+      }
+      .board .src {
+        font-size: 11px;
+        line-height: 18px;
+      }
+      .board .tiles {
+        position: relative;
+      }
+      .src-head {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: var(--text-faint);
+        margin-bottom: var(--s2);
+        font-family: var(--font-code);
+      }
+      .pin {
+        position: absolute;
+        left: 86px;
+        top: 26px;
+        font-size: 12px;
+        line-height: 1.45;
+        color: var(--torch-ink);
+        background: var(--torch);
+        padding: 5px 9px 5px 14px;
+        clip-path: polygon(6px 0, 100% 0, 100% 100%, 6px 100%, 6px 60%, 0 50%, 6px 40%);
+        white-space: nowrap;
+      }
+      .pin b {
+        font-family: var(--font-code);
+      }
+      .work .legend {
+        margin-top: var(--s4);
+      }
+      .work .caption {
+        margin: var(--s3) 0 0;
+        font-size: 13px;
+        color: var(--text-dim);
+      }
+
+      .versions {
+        list-style: none;
+        margin: var(--s5) 0 0;
+        padding: var(--s4) 0 0;
+        border-top: 2px dashed var(--stone-700);
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+      }
+      .versions li {
+        position: relative;
+        padding: 10px 12px 10px;
+        background: var(--stone-800);
+        font-size: 13px;
+        color: var(--text-dim);
+        line-height: 1.45;
+      }
+      .versions b {
+        display: block;
+        font-family: var(--font-code);
+        font-weight: 500;
+        font-size: 12px;
+        color: var(--text-faint);
+      }
+      .versions small {
+        display: block;
+        font-size: 11px;
+        color: var(--torch);
+      }
+      .versions li.done {
+        color: var(--parchment);
+      }
+      .versions li.done b {
+        color: var(--moss);
+      }
+      .versions li.now {
+        color: var(--parchment);
+        box-shadow: inset 0 0 0 2px var(--torch);
+        background: #2a2218;
+      }
+      .versions li.now b {
+        color: var(--torch);
+      }
+
+      /* 下の段 */
+      .shelf {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1.1fr;
+        gap: var(--s5);
+      }
+      .shelf .panel {
+        padding: var(--s5);
+        display: flex;
+        flex-direction: column;
+      }
+      .shelf h3 {
+        font-family: var(--font-display);
+        font-weight: 400;
+        font-size: 17px;
+        margin: 0;
+      }
+      .shelf .sub {
+        font-size: 13px;
+        color: var(--text-dim);
+        margin: 2px 0 var(--s4);
+      }
+      .shelf .more {
+        margin-top: auto;
+        font-size: 13px;
+        color: var(--text-dim);
+      }
+
+      .cards {
+        display: flex;
+        gap: var(--s2);
+        margin-bottom: var(--s4);
+      }
+      .card {
+        width: 84px;
+        height: 104px;
+        background: var(--stone-800);
+        clip-path: var(--notch);
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: inset 0 0 0 2px var(--stone-600);
+      }
+      .card code {
+        font-size: 13px;
+        color: var(--torch-hi);
+        font-weight: 600;
+      }
+      .card small {
+        font-size: 11px;
+        color: var(--text-dim);
+        line-height: 1.4;
+      }
+      .card.new {
+        box-shadow: inset 0 0 0 2px var(--torch);
+      }
+      .card.locked {
+        background: repeating-linear-gradient(
+          45deg,
+          var(--stone-850) 0 4px,
+          var(--stone-800) 4px 8px
+        );
+        box-shadow: inset 0 0 0 2px var(--stone-700);
+      }
+      .card.locked span {
+        font-family: var(--font-display);
+        color: var(--text-faint);
+        font-size: 20px;
+        align-self: center;
+        margin: auto;
+      }
+
+      .dex {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 4px;
+        margin-bottom: var(--s4);
+      }
+      .dex i {
+        aspect-ratio: 1;
+        background: var(--stone-800);
+        display: grid;
+        place-items: center;
+        font-style: normal;
+        font-family: var(--font-display);
+        font-size: 13px;
+        color: var(--stone-500);
+      }
+      .dex i.seen {
+        background: #2c2547;
+        color: var(--rune);
+        box-shadow: inset 0 0 0 2px #4d4180;
+      }
+      .dex i.caught {
+        background: #4d4180;
+        color: #f1ebff;
+      }
+      .dexkey {
+        display: flex;
+        gap: var(--s4);
+        font-size: 12px;
+        color: var(--text-dim);
+        margin-bottom: var(--s3);
+      }
+      .dexkey span {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .dexkey span::before {
+        content: '';
+        width: 10px;
+        height: 10px;
+      }
+      .dexkey .k1::before {
+        background: #4d4180;
+      }
+      .dexkey .k2::before {
+        background: #2c2547;
+        box-shadow: inset 0 0 0 2px #4d4180;
+      }
+
+      .dexlist {
+        list-style: none;
+        margin: 0 0 var(--s4);
+        padding: 0;
+        display: grid;
+        gap: 4px;
+      }
+      .dexlist li {
+        display: grid;
+        grid-template-columns: 28px 1fr auto;
+        align-items: center;
+        gap: var(--s3);
+        padding: 6px 10px;
+        background: var(--stone-800);
+        font-size: 13px;
+        line-height: 1.4;
+      }
+      .dexlist .no {
+        font-family: var(--font-display);
+        color: var(--rune);
+      }
+      .dexlist .nm code {
+        display: block;
+        font-size: 11px;
+        color: var(--text-faint);
+      }
+      .dexlist .st {
+        font-size: 11px;
+        padding: 2px 8px;
+      }
+      .dexlist .st.seen {
+        color: var(--rune);
+        box-shadow: inset 0 0 0 1px #6a5aa8;
+      }
+      .dexlist .st.caught {
+        background: #4d4180;
+        color: #f1ebff;
+      }
+      .pace .forecast {
+        display: flex;
+        align-items: baseline;
+        gap: var(--s2);
+        font-size: 13px;
+        color: var(--text-dim);
+        margin: 0 0 var(--s4);
+      }
+      .pace .forecast b {
+        font-family: var(--font-code);
+        color: var(--parchment);
+        font-weight: 500;
+        font-size: 15px;
+      }
+      .track {
+        position: relative;
+        height: 10px;
+        background: var(--stone-800);
+        margin: 0 0 6px;
+      }
+      .track .fill {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 31%;
+        background: var(--moss);
+      }
+      .track .buffer {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 22%;
+        background: repeating-linear-gradient(90deg, var(--stone-700) 0 4px, transparent 4px 8px);
+      }
+      .track-labels {
+        position: relative;
+        height: 16px;
+        font-family: var(--font-code);
+        font-size: 11px;
+        color: var(--text-faint);
+        margin-bottom: var(--s4);
+      }
+      .rest {
+        display: flex;
+        align-items: center;
+        gap: var(--s3);
+        margin-top: auto;
+      }
+      .rest p {
+        margin: 0;
+        font-size: 12px;
+        white-space: nowrap;
+        color: var(--text-faint);
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="home.html">
+        <span data-tiles="*" data-size="24" aria-hidden="true"></span>
+        Java ダンジョン工房
+      </a>
+      <nav class="topnav" aria-label="メイン">
+        <a href="#">作品</a>
+        <a href="#">技カード<span class="count">12</span></a>
+        <a href="#">エラー図鑑<span class="count">5</span></a>
+        <a href="#">記録</a>
+        <a href="#">設定</a>
+        <div class="level" aria-label="レベル 7。次のレベルまであと 4 ステップ">
+          <span class="level-num">Lv 7</span>
+          <span class="pips" aria-hidden="true"
+            ><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i
+            ><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i
+          ></span>
+          <small>次まで 4 ステップ</small>
+        </div>
+      </nav>
+    </header>
+
+    <main class="home">
+      <!-- 次の1ステップ -->
+      <section class="panel next" aria-labelledby="next-title">
+        <p class="eyebrow torch">次の1ステップ</p>
+        <p class="where"><b>第4章 配列</b> ／ 部品 4-5「壁にぶつかる」 ／ ステップ 2 / 3</p>
+        <h1 id="next-title"><code>canMove</code> を書いて、壁の前で止まる</h1>
+        <p class="what">
+          <code>#</code> のマスには進めないようにします。書くのは
+          <code>return</code> の1行だけです。
+        </p>
+        <div class="chips">
+          <span class="chip time">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 6 6"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path
+                fill="currentColor"
+                d="M1 0h4v1H1zM0 1h1v4H0zM5 1h1v4H5zM1 5h4v1H1zM3 1h1v2H3zM2 3h1v1H2z"
+              />
+            </svg>
+            約2分
+          </span>
+          <span class="chip">ブラウザで実行</span>
+          <span class="chip">実装</span>
+        </div>
+
+        <div class="goal">
+          <div
+            class="tiles"
+            data-tiles="#########|#...#...#|#.#.#.#.#|#.#...#@#|#########"
+            data-size="12"
+            aria-label="完成したときの出力。自分が迷路の右下に着いている"
+          ></div>
+          <div class="label">
+            <b>できあがるとこうなる</b>自分 <code>@</code> が壁を避けて、階段まで歩ききる
+          </div>
+        </div>
+
+        <div class="start-row">
+          <a class="btn primary big" href="problem.html">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 7 7"
+              aria-hidden="true"
+              shape-rendering="crispEdges"
+            >
+              <path fill="currentColor" d="M1 0h1v7H1zM2 1h1v5H2zM3 2h1v3H3zM4 3h1v1H4z" />
+            </svg>
+            始める <kbd>Enter</kbd>
+          </a>
+          <p class="okay"><b>このステップだけで終えてOK。</b>書きかけも自動で保存されます。</p>
+        </div>
+
+        <div class="steps">
+          <span>この部品</span>
+          <ol>
+            <li class="done">迷路を読む</li>
+            <li class="now">canMove</li>
+            <li>階段まで歩く</li>
+          </ol>
+        </div>
+        <p class="timepick">
+          時間がたっぷりある日は
+          <button type="button">持ち時間から選ぶ</button>（15分／30分／1時間〜）
+        </p>
+      </section>
+
+      <!-- 作品 -->
+      <section class="panel work" aria-labelledby="work-title">
+        <div class="work-head">
+          <h2 id="work-title">ちいさなダンジョン<span>v0.3</span></h2>
+          <a href="#">作品のコードを見る</a>
+        </div>
+        <div class="board">
+          <div class="glyphmap">
+            <div class="src-head"><span>標準出力</span><span>→ タイル</span></div>
+            <pre class="src" id="src"></pre>
+            <div class="tiles">
+              <div id="dungeon"></div>
+              <div class="pin">次のステップで <b>@</b> が壁で止まる</div>
+            </div>
+          </div>
+        </div>
+        <ul class="legend">
+          <li><code>#</code>壁</li>
+          <li><code>.</code>床</li>
+          <li><code>@</code>自分</li>
+          <li><code>*</code>松明</li>
+          <li><code>+</code>扉</li>
+          <li><code>~</code>水</li>
+          <li><code>%</code>苔</li>
+          <li><code>$</code>宝箱</li>
+          <li><code>G</code>階段</li>
+        </ul>
+        <p class="caption">
+          左は自分のコードが出した文字そのもの。1文字が1マスになります。黒い所は、まだ作っていない場所です。
+        </p>
+        <ol class="versions" aria-label="作品の育ち方">
+          <li class="done"><b>v0.3</b>床と壁の模様</li>
+          <li class="now"><b>v0.4</b>マップと移動<small>第4章・いまここ</small></li>
+          <li><b>v0.6</b>モンスター</li>
+          <li><b>v0.8</b>アイテムとセーブ</li>
+          <li><b>v1.0</b>Web で遊べる</li>
+        </ol>
+      </section>
+
+      <!-- 下の段 -->
+      <div class="shelf">
+        <section class="panel" aria-labelledby="cards-title">
+          <h3 id="cards-title">技カード</h3>
+          <p class="sub">12 / 41 枚。最後に手に入れたのは <code>char[][]</code></p>
+          <div class="cards">
+            <div class="card new"><code>char[][]</code><small>2次元の配列。迷路の地図</small></div>
+            <div class="card"><code>for</code><small>くりかえし</small></div>
+            <div class="card"><code>switch</code><small>場合分けの式</small></div>
+            <div class="card locked" aria-label="まだ持っていないカード"><span>?</span></div>
+          </div>
+          <a class="more" href="#">技カードを全部見る</a>
+        </section>
+
+        <section class="panel" aria-labelledby="dex-title">
+          <h3 id="dex-title" style="color: var(--rune)">エラー図鑑</h3>
+          <p class="sub">5 種を発見、そのうち 3 種を捕獲（直した）</p>
+          <ul class="dexlist">
+            <li>
+              <span class="no">05</span
+              ><span class="nm">配列のはみ出し<code>ArrayIndexOutOfBounds</code></span
+              ><span class="st seen">発見</span>
+            </li>
+            <li>
+              <span class="no">04</span
+              ><span class="nm">0 で割った<code>ArithmeticException</code></span
+              ><span class="st seen">発見</span>
+            </li>
+            <li>
+              <span class="no">03</span
+              ><span class="nm">かっこの閉じ忘れ<code>reached end of file</code></span
+              ><span class="st caught">捕獲</span>
+            </li>
+          </ul>
+          <a class="more" href="#">エラー図鑑を開く</a>
+        </section>
+
+        <section class="panel pace" aria-labelledby="pace-title">
+          <h3 id="pace-title">ペース</h3>
+          <p class="forecast">このままなら <b>2/18</b> ごろ完走。3月はまるごと予備</p>
+          <div class="track" aria-hidden="true">
+            <span class="fill"></span><span class="buffer"></span>
+          </div>
+          <div class="track-labels" aria-hidden="true">
+            <span style="position: absolute; left: 0">11/27</span
+            ><span style="position: absolute; left: 78%; transform: translateX(-50%)">2/28</span
+            ><span style="position: absolute; right: 0">3月 予備</span>
+          </div>
+          <div class="rest">
+            <button class="btn ghost" type="button">今週は Java を休む</button>
+            <p>休んだ週は見込みの計算から外します。<br />ダンジョンはそのまま残ります。</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script src="tiles.js"></script>
+    <script>
+      const rows = [
+        '######*#######*###        ',
+        '#..........#.....#        ',
+        '#..@.......+..$..#        ',
+        '#..........#.....#        ',
+        '###+###*####..~~~#        ',
+        '  #.....#  #..~~~#        ',
+        '  #.%%..#  #.....######   ',
+        '  #.%%..+..+.....+....G#  ',
+        '  #.....#  #######.....#  ',
+        '  ###*###        #######  ',
+      ];
+      Tiles.render(document.getElementById('dungeon'), rows, {
+        size: 18,
+        label: 'ちいさなダンジョン v0.3 のタイル表示',
+      });
+      document.getElementById('src').innerHTML = rows
+        .map(
+          (r) =>
+            `<span>${r.replace(/@/, '<span class="hl" style="display:inline">@</span>')}</span>`,
+        )
+        .join('');
+    </script>
+  </body>
+</html>
