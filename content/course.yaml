@@ -1,6 +1,6 @@
 # コースの並び（設計書 6-5）。章の題・作品の版・目安は 02-requirements.md 7章、
 # 使ってよい文法・API（allow）は 02-requirements.md 8-1 から写した。
-# parts（部品）は、その章の教材を作るときに決める（第0章は設計書 6-5 の例のまま。教材の作成担当が直す）
+# parts（部品）は、その章の教材を作るときに決める（第0章は教材の作成担当が決めた）
 version: 2026.12.01-1
 chapters:
   - id: ch00
@@ -11,7 +11,9 @@ chapters:
     askStage: void main と println まで。変数・if・for・配列・クラスはまだ
     parts:
       - { n: 1, title: ダンジョンの入口 }
-      - { n: 2, title: 壁を1行 }
+      - { n: 2, title: 出る行を読む }
+      - { n: 3, title: 最初の部屋 }
+      - { n: 4, title: 壊れた入口の修理 }
     allow:
       keywords: [void]
       apis: [System.out.println, System.out.print]
@@ -22,7 +24,12 @@ chapters:
     dungeon: { version: v0.1, adds: 勇者のステータス表示と HP バー }
     plannedMinutes: 168
     askStage: 変数・計算・文字列・printf・Scanner まで。if・for・配列・クラスはまだ
-    parts: []
+    parts:
+      - { n: 1, title: 勇者の名前と HP }
+      - { n: 2, title: 回復とレベルアップ }
+      - { n: 3, title: スライムとの戦い }
+      - { n: 4, title: HP バー }
+      - { n: 5, title: ステータス画面 }
     allow:
       keywords: [int, double, boolean, char, long, var, final, 'true', 'false', import, new]
       apis:
