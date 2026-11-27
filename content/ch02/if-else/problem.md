@@ -10,16 +10,16 @@ concepts: [if, compare, else-if, logic]
 minutes: 2
 source: compact
 render: tiles
-reviewed: false
+reviewed: true
 ---
 
 ## 説明
 
 `if` は分かれ道。`( )` の中の条件が `true` なら、すぐ後ろの `{ }` を動かす。`false` なら `else` の `{ }` を動かす。
 
-条件は、比べる記号で作る。結果は `true` か `false` になる。
+条件は、比べる記号で作る。結果は `true` か `false`（第1章の `boolean` の値）になる。
 
-- `==` … 等しい（`=` は代入。比べるのは `==`）
+- `==` … 等しい（`=` は値を入れる記号。比べるのは `==`）
 - `!=` … 等しくない
 - `<` `<=` … より小さい・以下
 - `>` `>=` … より大きい・以上

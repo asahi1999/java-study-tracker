@@ -10,7 +10,7 @@ concepts: [for, while]
 minutes: 2
 source: compact
 render: tiles
-reviewed: false
+reviewed: true
 ---
 
 ## 説明
@@ -26,6 +26,8 @@ reviewed: false
 x は 0, 1, 2, …, 6 と変わり、`{ }` は7回動く。
 
 `while (条件) { }` は、条件が true のあいだくりかえす。中で変数を変えないと、条件がずっと true のままで終わらない。
+
+第1章の `"#".repeat(7)` でも同じ壁は描ける。`for` なら、回ごとに `if` で違う文字を出せる（このあとの問題で使う）。
 
 `System.out.println()` は、改行だけを出す。`print` で横に並べたあと、行を終えるのに使う。
 

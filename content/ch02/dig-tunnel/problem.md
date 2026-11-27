@@ -16,7 +16,7 @@ judge:
   mode: output
   cases:
     - name: 宝箱までのトンネル
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

@@ -5,7 +5,7 @@ type: draw
 title: 壁で囲む
 chapter: 2
 part: 4
-order: 120
+order: 110
 concepts: [nested-loop, logic]
 minutes: 3
 goal: 床のまわりが壁になる
@@ -16,7 +16,7 @@ judge:
   mode: output
   cases:
     - name: 壁の部屋
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

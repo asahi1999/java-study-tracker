@@ -5,7 +5,7 @@ type: draw
 title: 市松模様の床
 chapter: 2
 part: 4
-order: 110
+order: 120
 concepts: [nested-loop, if]
 minutes: 3
 goal: 床が市松模様になる
@@ -17,7 +17,7 @@ judge:
   mode: output
   cases:
     - name: 市松模様
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

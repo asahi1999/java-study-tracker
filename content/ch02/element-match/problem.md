@@ -15,7 +15,7 @@ judge:
   mode: output
   cases:
     - name: 9通りの相性
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

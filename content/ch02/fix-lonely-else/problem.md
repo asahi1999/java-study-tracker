@@ -18,7 +18,7 @@ judge:
 expectError:
   kind: compile
   dex: else-without-if
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

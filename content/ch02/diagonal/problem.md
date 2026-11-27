@@ -15,7 +15,7 @@ choices:
   - "*...\n.*..\n..*.\n"
   - "*\n.*\n..*\n"
   - "*....\n.*...\n..*..\n"
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

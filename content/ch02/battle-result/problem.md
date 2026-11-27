@@ -14,7 +14,7 @@ judge:
   mode: output
   cases:
     - name: 5つの戦い
-reviewed: false
+reviewed: true
 ---
 
 ## 問題
@@ -49,5 +49,5 @@ reviewed: false
 
 ## 解説
 
-`if`・`else if`・`else` は、上から見て最初に true になった1つだけを動かす。だから、先に決めたい「勝ち」を一番上に置く。
+`if`・`else if`・`else` は、上から見て最初に true になった1つだけを動かす。だから、先に決めたい「勝ち」をいちばん上に置く。
 `if` を2つに分けると、1つの戦いで2行出ることがある。

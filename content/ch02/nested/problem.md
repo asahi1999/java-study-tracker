@@ -10,7 +10,7 @@ concepts: [nested-loop, break, continue]
 minutes: 2
 source: compact
 render: tiles
-reviewed: false
+reviewed: true
 ---
 
 ## 説明
@@ -23,7 +23,7 @@ reviewed: false
 
 `y` が 1 ふえるあいだに、`x` は 0 から最後まで1周する。`x` と `y` で、どのマスかが決まる。
 
-ループを途中で変える語が2つある。どちらも、いちばん内側のループにだけ効く。
+ループを途中で変える語が2つある。どちらも、その語を囲むループのうち、いちばん内側の1つにだけ効く。
 
 - `break;` … ループをすぐ終わる。残りの回はやらない
 - `continue;` … その回の残りを飛ばして、次の回に進む

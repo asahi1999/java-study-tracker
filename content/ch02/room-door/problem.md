@@ -2,7 +2,7 @@
 id: ch02.room-door
 rev: 1
 type: fill
-title: 扉をつける
+title: 扉を付ける
 chapter: 2
 part: 5
 order: 130
@@ -15,12 +15,12 @@ judge:
   mode: output
   cases:
     - name: 扉のある部屋
-reviewed: false
+reviewed: true
 ---
 
 ## 問題
 
-壁で囲んだ部屋に、扉 `+` を1つつける。場所は、下の壁の真ん中。`false` を書きかえる。できあがりはこうなる。
+壁で囲んだ部屋に、扉 `+` を1つ付ける。場所は、下の壁の真ん中。`false` を書きかえる。できあがりはこうなる。
 
 ```text
 #########

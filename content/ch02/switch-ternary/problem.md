@@ -10,7 +10,7 @@ concepts: [switch, ternary, string-equals]
 minutes: 2
 source: compact
 render: tiles
-reviewed: false
+reviewed: true
 ---
 
 ## 説明

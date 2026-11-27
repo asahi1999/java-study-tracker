@@ -14,7 +14,7 @@ choices:
   - "つかれた\n"
   - "ふらふら\n"
   - "つかれた\nふらふら\n"
-reviewed: false
+reviewed: true
 ---
 
 ## 問題
