@@ -52,7 +52,13 @@ chapters:
     dungeon: { version: v0.2, adds: 床・壁・松明の部屋と、戦闘の勝ち負け }
     plannedMinutes: 168
     askStage: if・switch・for・while まで。配列・メソッドの宣言・クラスはまだ
-    parts: []
+    parts:
+      - { n: 1, title: 分かれ道 }
+      - { n: 2, title: 値で選ぶ }
+      - { n: 3, title: くりかえす }
+      - { n: 4, title: 床と壁を描く }
+      - { n: 5, title: 扉と宝箱 }
+      - { n: 6, title: 戦いの決着 }
     allow:
       keywords: [if, else, switch, case, default, for, while, break, continue, '->', '?:']
       apis: [String#equals, String#isEmpty]
