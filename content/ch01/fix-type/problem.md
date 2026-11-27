@@ -17,7 +17,7 @@ judge:
 expectError:
   kind: compile
   dex: incompatible-types
-reviewed: false
+reviewed: true
 ---
 
 ## 問題
@@ -40,7 +40,7 @@ reviewed: false
 
 ## ヒント3
 
-`"30"` は数ではなく、文字の並び。型の宣言のほうは変えない（あとで引き算に使うため）。
+`"30"` は数ではなく、文字の並び。左の `int` は変えない（あとで引き算に使うため）。
 
 ## 解説
 

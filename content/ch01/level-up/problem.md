@@ -14,7 +14,7 @@ judge:
   mode: output
   cases:
     - name: レベルアップ
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

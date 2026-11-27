@@ -26,7 +26,7 @@ chapters:
     askStage: 変数・計算・文字列・printf・Scanner まで。if・for・配列・クラスはまだ
     parts:
       - { n: 1, title: 勇者の名前と HP }
-      - { n: 2, title: ダメージの計算 }
+      - { n: 2, title: 回復とレベルアップ }
       - { n: 3, title: スライムとの戦い }
       - { n: 4, title: HP バー }
       - { n: 5, title: ステータス画面 }

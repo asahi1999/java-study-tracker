@@ -16,7 +16,7 @@ judge:
   mode: output
   cases:
     - name: ステータス画面
-reviewed: false
+reviewed: true
 ---
 
 ## 問題
@@ -43,7 +43,7 @@ reviewed: false
 
 ## ヒント3
 
-`# ` も ` #` も2文字。`"#".repeat(…)` の `( )` の中に、その数を足した式を書く。
+`# ` と ` #` は2文字ずつ。左右の両方のぶんを、`"#".repeat(…)` の `( )` の中で `line.length()` に足す。
 
 ## 解説
 

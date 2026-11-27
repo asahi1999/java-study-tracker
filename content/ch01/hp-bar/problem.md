@@ -15,7 +15,7 @@ judge:
   mode: output
   cases:
     - name: HP 70/100
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

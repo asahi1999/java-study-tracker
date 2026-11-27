@@ -15,7 +15,7 @@ judge:
   mode: output
   cases:
     - name: ステータス
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

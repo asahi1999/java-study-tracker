@@ -38,7 +38,7 @@
 - id: variable
   name: 変数
   chapter: 1
-  oneLine: 値に名前を付けてしまう。型 名前 = 値;
+  oneLine: 値に名前を付けて取っておく。型 名前 = 値;
 - id: types
   name: 型
   chapter: 1

@@ -9,12 +9,12 @@ order: 10
 concepts: [variable, types, concat]
 minutes: 2
 source: compact
-reviewed: false
+reviewed: true
 ---
 
 ## 説明
 
-勇者のステータスを作る。まず、値に名前を付けてしまっておく。これが「変数」。
+勇者のステータスを作る。まず、値に名前を付けて、取っておく。これが「変数」。
 
 `型 名前 = 値;` と書く。型は、入れる値の種類。
 

@@ -9,7 +9,7 @@ order: 140
 concepts: [printf, formatted, cast]
 minutes: 2
 source: compact
-reviewed: false
+reviewed: true
 ---
 
 ## 説明

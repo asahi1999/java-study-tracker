@@ -14,7 +14,7 @@ choices:
   - "回復 12\n"
   - "回復 12.5\n"
   - "回復 13\n"
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

@@ -17,7 +17,7 @@ judge:
 expectError:
   kind: compile
   dex: uninitialized
-reviewed: false
+reviewed: true
 ---
 
 ## 問題
@@ -40,7 +40,7 @@ HP 26
 
 ## ヒント3
 
-値は、使う行より前に入れる。宣言する行で入れるのがいちばん簡単。
+値は、使う行より前に入れる。変数を作る行（`int damage`）で入れるのがいちばん簡単。
 
 ## 解説
 

@@ -14,7 +14,7 @@ judge:
   mode: output
   cases:
     - name: スライムとゴーレム
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

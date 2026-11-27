@@ -14,7 +14,7 @@ choices:
   - "HP 34\n7 HP\n"
   - "HP 7\n7 HP\n"
   - "HP 34\n34 HP\n"
-reviewed: false
+reviewed: true
 ---
 
 ## 問題
@@ -27,5 +27,5 @@ reviewed: false
 
 ## 解説
 
-1行目は `"HP " + hp` が先に文字列になる。そこに `heal` をつなぐので `HP 34`。
-2行目は `hp + heal` が先で、数どうしなので `7`。そこに `" HP"` をつなぐ。
+上の `println` は、`"HP " + hp` が先に文字列になる。そこに `heal` をつなぐので `HP 34`。
+下の `println` は、`hp + heal` が先で、数どうしなので `7`。そこに `" HP"` をつなぐ。

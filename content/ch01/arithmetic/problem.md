@@ -9,12 +9,14 @@ order: 50
 concepts: [arithmetic, int-division, modulo, compound-assign, math-max-min]
 minutes: 2
 source: compact
-reviewed: false
+reviewed: true
 ---
 
 ## 説明
 
 計算の記号は `+` `-` `*` `/` `%`。`*` はかけ算、`%` は割り算のあまり。
+
+`*` `/` `%` は、`+` `-` より先に計算する（算数と同じ）。`( )` があれば、その中が先。
 
 `int` どうしの `/` は、小数を切り捨てる。`7 / 2` は `3`。
 
