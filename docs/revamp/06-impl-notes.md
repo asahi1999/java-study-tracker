@@ -61,3 +61,54 @@
 
 - `actions/setup-java@v6` の `java-version-file: java/JDK_VERSION`（最初の CI のログで Java の版を見る）
 - CI（ubuntu）で content-verify と `test:teavm` が時間内に終わるか（この Mac では content-verify の見本 16秒、壊した見本 30秒、`test:teavm` 全体 約50秒）
+
+## フェーズ1b（画面と DB）
+
+- 実施: 2026-11-27（実装担当: 画面と DB）
+- 範囲: v2 の DB、ホーム（次の1ステップのカード）、ステップ画面（説明カード・予想・穴埋め・修理・実装・絵。クイズも同じ部品で開ける）、デザイントークンとフォント、v1 の画面をルートから外す、開発サーバーのポート、CSP、対応ブラウザの判定（案内まで）、Playwright の e2e 1・2
+
+### 置き場所
+
+| 設計                                    | 実装                                                                                    | 理由                                                                                                            |
+| --------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `src/db/database.ts` を v2 に作り直す   | `src/db/v2/`（`database.ts`・`types.ts`・`progress.ts`・`drafts.ts`・`meta.ts`）        | v1 のファイルとテストはフェーズ3で消すまで `src/db/database.ts` を使う。消すときに名前を戻してよい              |
+| `src/App.tsx` を v2 に作り直す          | `src/app/App.tsx`・`routes.tsx`。`main.tsx` はこちらを読む                              | v1 の `src/App.tsx` とテストを残したまま、ルートから外すため（ファイルはフェーズ3で消す）                       |
+| `src/components/tiles/sprites.svg`      | `src/domain/tiles/tileTable.ts` のドットの表から `TileSprites.tsx` が `<symbol>` を作る | 色と形を1か所にまとめ、コントラストを Vitest で確かめやすくするため                                             |
+| タイルは CSS グリッド（`div role=img`） | 格子全体を1枚の `<svg role="img">` にし、マスは `<use>`                                 | 80×40 でも要素が少なく、ドットがにじまない。読み上げは格子の `aria-label` だけで同じ                            |
+| 床は1種類                               | `floor-a`・`floor-b` を市松に置く                                                       | 「行ごとに粒の位置をずらす」（05-visual-design.md 6-2）を簡単に出すため                                         |
+| ロゴは 16×16 ドットの松明               | 8×8 の松明のタイルを拡大                                                                | 絵を増やさないため                                                                                              |
+| 画面のテストの教材                      | `tests/contentFixture.ts` が見本の教材を content-build と同じ処理で JSON にする         | `scripts/` は Node の型を使うので、型を追わない動的 import で読む（`tsconfig.json` に Node の型を足さないため） |
+
+### 画面
+
+- ホームはカードだけ。持ち時間の3つのボタン（F-HOME-3）は、フェーズ1ではどれも同じ結果（手元課題が無い）なので出していない。ナビ・レベル・作品・下段はフェーズ3・4b。カードの幅はほかの枠が無いので 560px まで（05-visual-design.md 5-1 の 460px は作品の枠と並べたとき）
+- ステップ画面の上の帯のパンくずは「部品の番号＋部品の名前」（モックと同じ）。部品に名前が無ければステップの題名
+- 実行ボタンの横の時間は、押してから結果が出るまで（コンパイルを含む）。`attempts.durationMs` は設計どおり実行だけの時間
+- 実行中の出力は流さず、結果が出てから出す。ハーネスは「そのまま実行」とケースの数だけ `main` を呼ぶので、流すと同じ出力が何度も出るため
+- エラーの表示はフェーズ1の範囲（原文と行）に「◯行目へ移動」だけ足した。日本語の説明・図鑑はフェーズ2・4b
+- 予想で間違えたらクリアにしない。解説と実際の出力を見せ、「もう一度答える」で答え直せる。「次のステップへ」は答えたあとならいつでも出す
+- 説明カードの「わかった」は `progress` だけ書く（`attempts` には残さない。試行ではないため）
+- 「書くのはここ」と折りたたみの印は、書きかけの行の並びが教材と同じときだけ付ける（ずれた範囲を畳んで学習者のコードを隠さないため）。折りたたみの帯はボタンで、押すと開く
+- 非対応のブラウザ: ステップ画面の上に案内（N-BR-2）、説明カードと予想の「動かす」ボタンを隠す。「手元で実行」はフェーズ4a
+
+### Java と対応ブラウザ
+
+- WasmGC の判定のバイト列（4-9）: `00 61 73 6d 01 00 00 00 01 05 01 5f 01 7f 00`（struct を1つ持つ型の節）。Chrome 158 と Node 24 で `WebAssembly.validate` が true（実測）。`src/runtime/java/support.ts`
+- 判定に通れば `meta.java.support = 'ok'`、通らなければ `unsupported` と、何もしない `JavaRunner`（`createUnsupportedRunner`）を使う。「Hello を実際に動かす」確かめはフェーズ4a
+- 先読み（4-10）はホームの表示のあと `requestIdleCallback`（無ければ 1.5秒後）。ステップ画面を直接開いたときは、最初の実行で準備する
+
+### 道具・設定
+
+- 開発サーバーのポートは 5179（設計書 2-2 の仮の値のまま。3000・3001・5000・7000 と重ならず、空いていた）。`vite.config.ts` の `server: { port: 5179, strictPort: true }`、`npm run dev` は `vite --open`
+- CSP（11-4）は `scripts/lib/csp.ts` の Vite のプラグインで、本番のビルドの `index.html` にだけ付ける。設計との違いが2つ
+  - `index.html` の起動前のテーマのスクリプト（インライン）を許すため、中身の sha256 を `script-src` に足す
+  - Vite は 4KB 未満のフォントを `data:` にして CSS に埋め込み、`font-src 'self'` で止められた（e2e で見つけた）。`build.assetsInlineLimit` でフォントだけ埋め込まない
+- CSP を付けた本番のビルドで CodeMirror に色が付くことを e2e の 1 で確かめた（15-2 の「CSP で CodeMirror の色が付くか」は済み。`style-src 'unsafe-inline'` を外すと付かないかは試していない）
+- e2e は `npm run e2e`: 見本の教材（`tests/content-fixtures/good`）で `.cache/e2e-dist` にビルドし、`vite preview --port 4317` で Chromium を動かす。ビルドのあと `src/content/generated` は本物の教材に作り直す。CI に `e2e` ジョブを足した
+- フォントは `@fontsource/dotgothic16` 5.3.1（パッケージ名は 05-visual-design.md 9章のとおり）、`@fontsource/ibm-plex-mono` 5.3.0。v1 の Barlow Semi Condensed は `main.tsx` から外した（パッケージの削除はフェーズ3）
+- `tests/setup.ts` で jsdom の `Range.getClientRects` を空の値にした（CodeMirror が位置を測ろうとして例外を出すため）。v2 の DB の表も毎回空にする
+
+### 未確認のまま
+
+- フォントの初回のダウンロード量（05-visual-design.md 9章）。PWA の precache から外すのはフェーズ5
+- `prefers-reduced-motion` のときに松明の動きが止まることは、CSS の決まり（4-6）を入れただけで画面では確かめていない

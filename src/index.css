@@ -3,132 +3,80 @@
 @tailwind utilities;
 
 /*
- * 数字だけを欧文フォント（Barlow Semi Condensed）で表示するための定義。
- * 本文の日本語フォント（BIZ UDPゴシック）は数字の幅が字ごとに違い、表やタイマーで桁がそろわない。
- * unicode-range で 0〜9 だけをこのフォントに割り当て、font-family の先頭に置くことで、
- * アプリ内のすべての数字を等幅でそろえている。
- *
- * この欧文フォントは数字の背が日本語フォントより1割ほど低いので、size-adjust で高さをそろえている
+ * デザイントークン（docs/revamp/05-visual-design.md 4-2）。
+ * 色は「R G B」の3つ組で持つ。Tailwind 側で透明度を足せるようにするため（bg-torch/15 など）
  */
-@font-face {
-  font-family: 'JST Numerals';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('@fontsource/barlow-semi-condensed/files/barlow-semi-condensed-latin-400-normal.woff2')
-    format('woff2');
-  unicode-range: U+0030-0039;
-  size-adjust: 112%;
-}
-
-@font-face {
-  font-family: 'JST Numerals';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('@fontsource/barlow-semi-condensed/files/barlow-semi-condensed-latin-700-normal.woff2')
-    format('woff2');
-  unicode-range: U+0030-0039;
-  size-adjust: 112%;
-}
-
 @layer base {
-  /* 色は「R G B」の3つ組で持つ。Tailwind 側で透明度を足せるようにするため */
+  /* ライト（羊皮紙） */
   :root {
-    --bg: 238 241 246;
-    --surface: 255 255 255;
-    --subtle: 221 227 238;
-    --ink: 15 33 71;
-    --muted: 86 102 138;
-    --line: 211 218 232;
+    --bg: 243 237 224;
+    --panel: 251 248 241;
+    --panel-2: 235 228 212;
+    --line: 214 204 184;
+    --line-strong: 140 129 112;
+    --ink: 31 28 42;
+    --ink-dim: 79 72 98;
+    --ink-faint: 99 92 120;
+    --torch-text: 143 83 0;
+    --moss: 42 111 69;
+    --rune: 106 79 196;
+    --ember: 163 61 37;
+    --water: 38 100 140;
+    --focus: 143 83 0;
+    --topbar: 251 248 241;
 
-    --board: 15 33 71;
-    --board-ink: 255 255 255;
-    --board-muted: 169 184 216;
-    --board-line: 42 60 102;
-    /* 板はライトでもダークでも濃紺なので、板の上の「遅れ」の赤は1つの値で足りる */
-    --board-alert: 214 63 56;
-
-    --accent: 255 196 0;
-    --accent-ink: 15 33 71;
-
-    /* 黄色は白地では見えにくいので、ライトでは進捗の塗りを濃紺にする */
-    --progress: 15 33 71;
-    --focus: 15 33 71;
-
-    /* 学習カレンダーの5段階。ライトは濃紺の濃淡、ダークは黄色の濃淡（進捗の塗りと同じ考え方） */
-    --heat-0: 228 232 241;
-    --heat-1: 169 184 216;
-    --heat-2: 107 127 176;
-    --heat-3: 53 80 140;
-    --heat-4: 15 33 71;
-
-    --st-gray: 124 135 155;
-    --st-gray-fg: 73 85 114;
-    --st-gray-bg: 233 236 242;
-    --st-blue: 43 108 224;
-    --st-blue-fg: 29 79 176;
-    --st-blue-bg: 227 236 252;
-    --st-green: 27 154 102;
-    --st-green-fg: 15 107 69;
-    --st-green-bg: 223 243 234;
-    --st-red: 214 63 56;
-    --st-red-fg: 168 40 34;
-    --st-red-bg: 251 229 227;
+    /* テーマで変わらない色 */
+    --torch: 244 168 61;
+    --torch-hover: 247 181 83;
+    --torch-press: 201 127 34;
+    --torch-ink: 26 20 8;
+    --torch-hi: 255 210 122;
+    --well: 20 18 27;
+    --well-2: 26 24 36;
+    --well-ink: 236 228 211;
+    --well-dim: 178 171 194;
+    --well-faint: 134 128 157;
   }
 
+  /* ダーク（石） */
   .dark {
-    --bg: 8 18 38;
-    --surface: 15 30 61;
-    --subtle: 36 56 96;
-    --ink: 238 242 250;
-    --muted: 157 173 205;
-    --line: 36 56 96;
-
-    --board: 5 12 27;
-    --board-line: 26 42 77;
-
-    --progress: 255 196 0;
-    --focus: 255 196 0;
-
-    --heat-0: 36 56 96;
-    --heat-1: 84 80 52;
-    --heat-2: 135 113 30;
-    --heat-3: 195 155 15;
-    --heat-4: 255 196 0;
-
-    --st-gray: 142 154 179;
-    --st-gray-fg: 195 204 222;
-    --st-gray-bg: 37 50 79;
-    --st-blue: 91 147 245;
-    --st-blue-fg: 157 192 255;
-    --st-blue-bg: 23 48 95;
-    --st-green: 45 189 131;
-    --st-green-fg: 127 224 180;
-    --st-green-bg: 15 59 51;
-    --st-red: 240 101 94;
-    --st-red-fg: 255 169 163;
-    --st-red-bg: 74 31 42;
+    --bg: 26 24 36;
+    --panel: 31 28 42;
+    --panel-2: 36 33 50;
+    --line: 47 43 64;
+    --line-strong: 107 100 136;
+    --ink: 236 228 211;
+    --ink-dim: 178 171 194;
+    --ink-faint: 149 142 168;
+    --torch-text: 244 168 61;
+    --moss: 134 199 159;
+    --rune: 184 162 242;
+    --ember: 240 143 112;
+    --water: 111 179 217;
+    --focus: 255 210 122;
+    --topbar: 20 18 27;
   }
 
-  /* 濃紺の板の上では、濃紺のフォーカス枠が見えないので黄色にする */
-  .on-board {
-    --focus: 255 196 0;
+  /* well（エディタ・出力・タイル）の上はテーマに関係なく暗いので、フォーカスの色も明るくする */
+  .on-well {
+    --focus: 255 210 122;
   }
 
   body {
-    @apply bg-bg font-sans text-ink antialiased;
+    @apply bg-bg font-sans text-base text-ink antialiased;
     font-variant-numeric: tabular-nums;
+  }
+
+  code,
+  kbd,
+  pre,
+  samp {
+    font-variant-ligatures: none;
   }
 
   :focus-visible {
     outline: 2px solid rgb(var(--focus));
     outline-offset: 2px;
-  }
-
-  /* ダイアログを開いている間は、後ろの画面をスクロールさせない */
-  html:has(dialog[open]) {
-    overflow: hidden;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -144,82 +92,110 @@
 }
 
 @layer components {
-  /* メモのプレビュー（Markdown を変換したHTML）の見た目。中のタグにはクラスを付けられないので、ここでまとめて指定する */
-  .markdown {
-    @apply text-[15px] leading-relaxed;
+  /* 問題文・説明・解説（Markdown を変換した HTML）。中のタグにはクラスを付けられないので、ここでまとめて指定する */
+  .prose-jq {
+    @apply text-base text-ink;
   }
-  .markdown > :first-child {
+  .prose-jq > :first-child {
     @apply mt-0;
   }
-  .markdown > :last-child {
+  .prose-jq > :last-child {
     @apply mb-0;
   }
-  .markdown h1,
-  .markdown h2,
-  .markdown h3,
-  .markdown h4 {
-    @apply mb-2 mt-5 font-bold leading-snug;
-  }
-  .markdown h1 {
-    @apply text-xl;
-  }
-  .markdown h2 {
-    @apply text-lg;
-  }
-  .markdown h3,
-  .markdown h4 {
-    @apply text-base;
-  }
-  .markdown p,
-  .markdown ul,
-  .markdown ol,
-  .markdown pre,
-  .markdown blockquote,
-  .markdown table {
+  .prose-jq p,
+  .prose-jq ul,
+  .prose-jq ol,
+  .prose-jq pre,
+  .prose-jq blockquote {
     @apply my-3;
   }
-  .markdown ul {
+  .prose-jq ul {
     @apply list-disc pl-6;
   }
-  .markdown ol {
+  .prose-jq ol {
     @apply list-decimal pl-6;
   }
-  .markdown li {
-    @apply my-1;
+  .prose-jq h3,
+  .prose-jq h4 {
+    @apply mb-2 mt-4 font-bold;
   }
-  /* チェックボックスつきのリスト（- [ ] 形式）は行頭の記号を消す */
-  .markdown li:has(> input[type='checkbox']) {
-    @apply -ml-6 list-none;
-  }
-  .markdown li > input[type='checkbox'] {
-    @apply mr-2 accent-ink;
-  }
-  .markdown a {
+  .prose-jq a {
     @apply font-bold underline underline-offset-2;
   }
-  .markdown code {
-    @apply rounded bg-subtle px-1.5 py-0.5 font-mono text-[13px];
+  .prose-jq code {
+    @apply whitespace-nowrap bg-panel-2 px-1.5 py-px font-mono text-[13px] text-ink;
   }
-  .markdown pre {
-    @apply overflow-x-auto rounded bg-subtle p-3;
+  .prose-jq pre {
+    @apply overflow-x-auto bg-well p-3 font-mono text-code text-well-ink;
   }
-  .markdown pre code {
-    @apply bg-transparent p-0;
+  .prose-jq pre code {
+    @apply whitespace-pre bg-transparent p-0 text-well-ink;
   }
-  .markdown blockquote {
-    @apply border-l-[3px] border-line pl-3 text-muted;
+  .prose-jq strong {
+    @apply font-bold;
   }
-  .markdown hr {
-    @apply my-5 border-line;
+
+  /* 小ラベル（eyebrow）: 8×8 の四角＋ドット文字（05-visual-design.md 7-2） */
+  .eyebrow {
+    @apply flex items-center gap-2 font-display text-display-s;
+    letter-spacing: 0.12em;
   }
-  .markdown table {
-    @apply block w-full overflow-x-auto text-sm;
+  .eyebrow::before {
+    content: '';
+    @apply inline-block h-2 w-2 shrink-0 bg-current;
   }
-  .markdown th,
-  .markdown td {
-    @apply border border-line px-3 py-1.5 text-left;
+
+  /* キーの表示（05-visual-design.md 7-1） */
+  .kbd {
+    @apply inline-block bg-black/25 px-1.5 font-mono text-xs leading-5;
+    box-shadow: inset 0 -2px 0 rgb(0 0 0 / 0.3);
   }
-  .markdown th {
-    @apply bg-subtle font-bold;
+}
+
+@layer utilities {
+  /* 角丸の代わりのピクセルの角欠け（05-visual-design.md 4-7） */
+  .notch-2 {
+    clip-path: polygon(
+      2px 0,
+      calc(100% - 2px) 0,
+      calc(100% - 2px) 2px,
+      100% 2px,
+      100% calc(100% - 2px),
+      calc(100% - 2px) calc(100% - 2px),
+      calc(100% - 2px) 100%,
+      2px 100%,
+      2px calc(100% - 2px),
+      0 calc(100% - 2px),
+      0 2px,
+      2px 2px
+    );
+  }
+  .notch-4 {
+    clip-path: polygon(
+      4px 0,
+      calc(100% - 4px) 0,
+      calc(100% - 4px) 2px,
+      calc(100% - 2px) 2px,
+      calc(100% - 2px) 4px,
+      100% 4px,
+      100% calc(100% - 4px),
+      calc(100% - 2px) calc(100% - 4px),
+      calc(100% - 2px) calc(100% - 2px),
+      calc(100% - 4px) calc(100% - 2px),
+      calc(100% - 4px) 100%,
+      4px 100%,
+      4px calc(100% - 2px),
+      2px calc(100% - 2px),
+      2px calc(100% - 4px),
+      0 calc(100% - 4px),
+      0 4px,
+      2px 4px,
+      2px 2px,
+      4px 2px
+    );
+  }
+  .pixelated {
+    image-rendering: pixelated;
+    shape-rendering: crispEdges;
   }
 }

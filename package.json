@@ -2,14 +2,14 @@
   "name": "java-study-tracker",
   "private": true,
   "version": "1.0.0",
-  "description": "Java学習の3ヶ月ロードマップを管理する学習トラッカー",
+  "description": "ブラウザで Java を書いて動かし、出力の文字でダンジョンを描いて学ぶアプリ",
   "type": "module",
   "engines": {
     "node": ">=24.15.0"
   },
   "scripts": {
     "predev": "npm run content:build",
-    "dev": "vite",
+    "dev": "vite --open",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
@@ -23,13 +23,23 @@
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
     "test:teavm": "vitest run --config vitest.teavm.config.ts",
+    "e2e:build": "node scripts/content-build.ts --content tests/content-fixtures/good && vite build --outDir .cache/e2e-dist --emptyOutDir && node scripts/content-build.ts",
+    "e2e": "npm run e2e:build && playwright test",
     "content:build": "node scripts/content-build.ts",
     "content:verify": "node scripts/content-verify.ts",
     "teavm:verify": "node scripts/teavm-verify.ts"
   },
   "dependencies": {
+    "@codemirror/commands": "6.11.2",
+    "@codemirror/lang-java": "6.0.2",
+    "@codemirror/language": "6.13.1",
+    "@codemirror/state": "6.7.6",
+    "@codemirror/view": "6.44.2",
     "@fontsource/barlow-semi-condensed": "5.3.0",
     "@fontsource/biz-udpgothic": "5.3.0",
+    "@fontsource/dotgothic16": "5.3.1",
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@lezer/highlight": "1.2.5",
     "date-fns": "4.4.0",
     "dexie": "4.4.7",
     "dexie-react-hooks": "4.4.0",
@@ -46,6 +56,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@playwright/test": "1.65.1",
     "@testing-library/dom": "10.4.2",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.3",

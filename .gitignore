@@ -24,3 +24,7 @@ coverage
 src/content/generated
 public/java/manifest.json
 .cache
+
+# Playwright の出力
+test-results
+playwright-report

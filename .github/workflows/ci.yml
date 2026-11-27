@@ -78,3 +78,25 @@ jobs:
 
       - name: 本物の teavm-javac と JDK を使うテスト
         run: npm run test:teavm
+
+  # ブラウザでの通しのテスト（設計書 12-2。Chromium だけ）。本番と同じビルドを見本の教材で作って動かす
+  e2e:
+    name: ブラウザでの通しのテスト（Playwright）
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: 依存パッケージのインストール
+        run: npm ci
+
+      - name: Playwright の Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: 通しのテスト
+        run: npm run e2e

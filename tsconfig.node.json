@@ -13,7 +13,9 @@
 
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    // vite.config.ts から scripts/lib/csp.ts を拡張子つきで読む
+    "allowImportingTsExtensions": true
   },
-  "include": ["vite.config.ts", "vitest.teavm.config.ts"]
+  "include": ["vite.config.ts", "vitest.teavm.config.ts", "playwright.config.ts"]
 }

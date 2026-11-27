@@ -6,3 +6,5 @@ public/java/**/*.js
 public/java/manifest.json
 src/content/generated
 .cache
+test-results
+playwright-report

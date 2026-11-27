@@ -14,6 +14,8 @@ export default defineConfig([
     'public/java',
     'src/content/generated',
     '.cache',
+    'test-results',
+    'playwright-report',
     // デザインのモック（ブラウザで直接開く見本。アプリのコードではない）
     'docs/revamp/mockups',
   ]),

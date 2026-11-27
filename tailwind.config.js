@@ -1,82 +1,89 @@
-// 色は src/index.css のCSS変数で定義している（ライト／ダークで値が切り替わる）。
-// ここでは、その変数を Tailwind のクラス（bg-surface、text-ink/60 など）で使えるようにする
+// デザイントークン（docs/revamp/05-visual-design.md 4章が正本）。
+// 色は src/index.css の CSS 変数（R G B の3つの数）で持ち、ライト／ダークで値が切り替わる。
+// ここでは、その変数を Tailwind のクラス（bg-panel、text-ink-dim、bg-torch/15 など）で使えるようにする
 const token = (name) => `rgb(var(--${name}) / <alpha-value>)`;
-
-const statusColor = (name) => ({
-  DEFAULT: token(`st-${name}`),
-  fg: token(`st-${name}-fg`),
-  bg: token(`st-${name}-bg`),
-});
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  // OSの設定ではなく、アプリの設定（ライト／ダーク／システム）で切り替えるため class 方式にする
+  // OS の設定ではなく、アプリの設定（ライト／ダーク／システム）で切り替えるため class 方式にする
   darkMode: 'class',
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
+    // 角丸は使わない（ピクセルの角欠けは notch-2 / notch-4 で）
+    borderRadius: { none: '0', DEFAULT: '0' },
     extend: {
       colors: {
         bg: token('bg'),
-        surface: token('surface'),
-        subtle: token('subtle'),
-        ink: token('ink'),
-        muted: token('muted'),
-        line: token('line'),
-        // 濃紺の「板」（サイドバー・路線バー・下部タブ）。駅の案内サインを手本にしている
-        board: {
-          DEFAULT: token('board'),
-          ink: token('board-ink'),
-          muted: token('board-muted'),
-          line: token('board-line'),
-          alert: token('board-alert'),
+        panel: { DEFAULT: token('panel'), 2: token('panel-2') },
+        line: { DEFAULT: token('line'), strong: token('line-strong') },
+        ink: { DEFAULT: token('ink'), dim: token('ink-dim'), faint: token('ink-faint') },
+        topbar: token('topbar'),
+        torch: {
+          DEFAULT: token('torch'),
+          hover: token('torch-hover'),
+          press: token('torch-press'),
+          ink: token('torch-ink'),
+          hi: token('torch-hi'),
+          text: token('torch-text'),
         },
-        accent: {
-          DEFAULT: token('accent'),
-          ink: token('accent-ink'),
+        moss: token('moss'),
+        rune: token('rune'),
+        ember: token('ember'),
+        water: token('water'),
+        focus: token('focus'),
+        well: {
+          DEFAULT: token('well'),
+          2: token('well-2'),
+          ink: token('well-ink'),
+          dim: token('well-dim'),
+          faint: token('well-faint'),
         },
-        progress: token('progress'),
-        // 学習カレンダーの色の濃さ（0〜4）
-        heat: {
-          0: token('heat-0'),
-          1: token('heat-1'),
-          2: token('heat-2'),
-          3: token('heat-3'),
-          4: token('heat-4'),
-        },
-        // 状態の色はアクセント色とは別に定義する
-        status: {
-          gray: statusColor('gray'),
-          blue: statusColor('blue'),
-          green: statusColor('green'),
-          red: statusColor('red'),
+        syntax: {
+          keyword: '#c9b5ff',
+          type: '#86c6ea',
+          string: '#a3dcb6',
+          number: '#f7c47f',
+          comment: '#8e88a3',
+          method: '#f2e9d8',
+          punct: '#a9a2bb',
+          error: '#f08f70',
         },
       },
       fontFamily: {
-        // 先頭の "JST Numerals" は数字だけを持つフォント（src/index.css で定義）
-        sans: [
-          '"JST Numerals"',
-          '"BIZ UDPGothic"',
-          '"Hiragino Sans"',
-          '"Yu Gothic UI"',
-          'Meiryo',
-          'sans-serif',
-        ],
-        num: ['"Barlow Semi Condensed"', '"BIZ UDPGothic"', 'sans-serif'],
+        display: ['DotGothic16', '"BIZ UDPGothic"', '"Hiragino Sans"', 'sans-serif'],
+        sans: ['"BIZ UDPGothic"', '"Hiragino Sans"', '"Yu Gothic UI"', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', '"SF Mono"', 'Menlo', 'monospace'],
       },
+      fontSize: {
+        xs: ['12px', { lineHeight: '1.5' }],
+        sm: ['13px', { lineHeight: '1.6' }],
+        base: ['15px', { lineHeight: '1.7' }],
+        lg: ['17px', { lineHeight: '1.5' }],
+        code: ['14px', { lineHeight: '22px' }],
+        'code-sm': ['12px', { lineHeight: '18px' }],
+        'display-s': ['16px', { lineHeight: '1.5', letterSpacing: '0.04em' }],
+        'display-m': ['24px', { lineHeight: '1.4', letterSpacing: '0.02em' }],
+        'display-l': ['32px', { lineHeight: '1.35', letterSpacing: '0.02em' }],
+      },
+      boxShadow: {
+        press: 'inset 0 -4px 0 rgb(var(--torch-press))',
+        edge: 'inset 0 0 0 2px rgb(var(--line-strong))',
+        'focus-in': 'inset 0 0 0 2px rgb(var(--focus))',
+      },
+      transitionDuration: { fast: '120ms', base: '200ms', slow: '400ms' },
+      transitionTimingFunction: { ui: 'cubic-bezier(.2,.8,.2,1)', pixel: 'steps(3, end)' },
       keyframes: {
-        // 車内の路線案内で「次の駅」が点滅する動きを、進行中の週に使う
-        station: {
-          '0%, 100%': { boxShadow: '0 0 0 2.5px rgb(var(--accent))' },
-          '50%': { boxShadow: '0 0 0 2.5px rgb(var(--accent) / 0.3)' },
+        ignite: {
+          from: { opacity: '0', transform: 'scale(.6)' },
+          to: { opacity: '1', transform: 'scale(1)' },
         },
-        'modal-in': {
-          from: { opacity: '0', transform: 'translateY(8px)' },
-          to: { opacity: '1', transform: 'translateY(0)' },
-        },
+        sweep: { from: { left: '-40%' }, to: { left: '120%' } },
+        breathe: { '50%': { opacity: '0.6' } },
       },
       animation: {
-        station: 'station 2.4s ease-in-out infinite',
-        'modal-in': 'modal-in 160ms ease-out',
+        ignite: 'ignite 240ms steps(3, end) both',
+        sweep: 'sweep 900ms cubic-bezier(.2,.8,.2,1) 1',
+        breathe: 'breathe 3.2s ease-in-out infinite',
       },
     },
   },
