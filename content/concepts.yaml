@@ -3,4 +3,33 @@
 #   name: println       # カードの名前
 #   chapter: 0          # 習う章
 #   oneLine: 1行を出して改行する
-[]
+
+# 第0章
+- id: main
+  name: void main()
+  chapter: 0
+  oneLine: プログラムはここの { } の中から始まる
+- id: println
+  name: println
+  chapter: 0
+  oneLine: 1行を出して改行する
+- id: print
+  name: print
+  chapter: 0
+  oneLine: 改行せずに出す
+- id: string
+  name: 文字列
+  chapter: 0
+  oneLine: '" " で囲んだ文字の並び。中身がそのまま出る'
+- id: comment
+  name: コメント
+  chapter: 0
+  oneLine: // から行の終わりまでは実行されない
+- id: semicolon
+  name: 文と ;
+  chapter: 0
+  oneLine: 文の終わりに ; を付ける
+- id: compile-error
+  name: コンパイルエラー
+  chapter: 0
+  oneLine: 書き方の間違い。行の番号から読む

@@ -1,6 +1,6 @@
 # コースの並び（設計書 6-5）。章の題・作品の版・目安は 02-requirements.md 7章、
 # 使ってよい文法・API（allow）は 02-requirements.md 8-1 から写した。
-# parts（部品）は、その章の教材を作るときに決める（第0章は設計書 6-5 の例のまま。教材の作成担当が直す）
+# parts（部品）は、その章の教材を作るときに決める（第0章は教材の作成担当が決めた）
 version: 2026.12.01-1
 chapters:
   - id: ch00
@@ -11,7 +11,8 @@ chapters:
     askStage: void main と println まで。変数・if・for・配列・クラスはまだ
     parts:
       - { n: 1, title: ダンジョンの入口 }
-      - { n: 2, title: 壁を1行 }
+      - { n: 2, title: 最初の部屋 }
+      - { n: 3, title: 壊れた入口の修理 }
     allow:
       keywords: [void]
       apis: [System.out.println, System.out.print]
