@@ -7,6 +7,7 @@ import { cleanup, configure } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 
 import { db } from '@/db/database';
+import { v2db } from '@/db/v2/database';
 import { useTimerStore } from '@/stores/timerStore';
 import { useToastStore } from '@/stores/toastStore';
 
@@ -22,6 +23,17 @@ configure({ asyncUtilTimeout: 10_000 });
 // jsdom は window.scrollTo を実装しておらず、呼ぶとコンソールにエラーが出るので空の関数にする
 window.scrollTo = () => {};
 
+// jsdom は Range の位置を測れない。CodeMirror が測ろうとして例外を出すので、空の値を返す
+if (!Range.prototype.getClientRects) {
+  Range.prototype.getClientRects = () =>
+    ({
+      length: 0,
+      item: () => null,
+      [Symbol.iterator]: [][Symbol.iterator],
+    }) as unknown as DOMRectList;
+  Range.prototype.getBoundingClientRect = () => new DOMRect();
+}
+
 // jsdom は <dialog> の showModal / close を実装していないので、開閉の状態だけを再現する
 if (!HTMLDialogElement.prototype.showModal) {
   HTMLDialogElement.prototype.showModal = function showModal(this: HTMLDialogElement) {
@@ -36,7 +48,7 @@ if (!HTMLDialogElement.prototype.showModal) {
 
 // テスト同士が影響しないよう、毎回すべてのテーブルを空にする
 beforeEach(async () => {
-  await Promise.all(db.tables.map((table) => table.clear()));
+  await Promise.all([...db.tables, ...v2db.tables].map((table) => table.clear()));
 });
 
 afterEach(() => {
