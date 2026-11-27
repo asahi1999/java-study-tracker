@@ -1,0 +1,40 @@
+- id: semicolon-expected
+  no: 1
+  name: ;忘れ
+  kind: compile
+  match:
+    javacEn: ["^';' expected$"]
+    javacJa: ["^';'がありません$"]
+  summary: 文の終わりの ; が無い
+  causes: [行の終わりに ; を書き忘れた]
+  fix: エラーの行の終わりを見る
+  chapter: 0
+  fixture: true
+- id: unclosed-string
+  no: 2
+  name: 閉じない文字列
+  kind: compile
+  match:
+    javacEn: ['unclosed string literal']
+    javacJa: ['文字列リテラルが閉じられていません']
+  summary: 文字列が閉じていない
+  causes: [最後の引用符を書き忘れた]
+  fix: 引用符を数える
+  chapter: 0
+- id: arithmetic
+  no: 3
+  name: ゼロ割り
+  kind: runtime
+  match: { exception: [java.lang.ArithmeticException] }
+  summary: 整数を 0 で割った
+  causes: [割る数が 0]
+  fix: 割る数を見る
+  chapter: 1
+- id: infinite-loop
+  no: 4
+  name: 終わらないループ
+  kind: limit
+  summary: 終わらなかった
+  causes: [条件がずっと true]
+  fix: 条件を見る
+  chapter: 2

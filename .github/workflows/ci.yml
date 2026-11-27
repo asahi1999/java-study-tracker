@@ -47,3 +47,34 @@ jobs:
 
       - name: ビルド
         run: npm run build
+
+  # 教材を JDK 25 と teavm-javac の両方で動かして確かめる（設計書 12-1）
+  content:
+    name: 教材の検証（JDK 25 と teavm-javac）
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # JDK の版は java/JDK_VERSION（25.0.5）にそろえる
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version-file: java/JDK_VERSION
+
+      - name: Java の版
+        run: java -version && javac -version
+
+      - name: 依存パッケージのインストール
+        run: npm ci
+
+      - name: 教材の検証
+        run: npm run content:verify -- --jobs 4
+
+      - name: 本物の teavm-javac と JDK を使うテスト
+        run: npm run test:teavm

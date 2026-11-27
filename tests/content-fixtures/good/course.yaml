@@ -1,0 +1,22 @@
+# 見本の教材（テスト用）。本物の教材ではない
+version: 2026.01.01-1
+chapters:
+  - id: ch00
+    number: 0
+    title: 見本の章
+    dungeon: { version: v0.0, adds: 見本 }
+    plannedMinutes: 30
+    askStage: 見本
+    parts:
+      - { n: 1, title: 見本の部品1 }
+      - { n: 2, title: 見本の部品2 }
+    allow:
+      keywords: [void]
+      apis: [System.out.println, System.out.print]
+  - id: ch01
+    number: 1
+    title: 見本の章2
+    dungeon: { version: v0.1, adds: 見本 }
+    plannedMinutes: 30
+    askStage: 見本
+    allow: {}

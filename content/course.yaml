@@ -1,0 +1,262 @@
+# コースの並び（設計書 6-5）。章の題・作品の版・目安は 02-requirements.md 7章、
+# 使ってよい文法・API（allow）は 02-requirements.md 8-1 から写した。
+# parts（部品）は、その章の教材を作るときに決める（第0章は設計書 6-5 の例のまま。教材の作成担当が直す）
+version: 2026.12.01-1
+chapters:
+  - id: ch00
+    number: 0
+    title: はじめの一歩
+    dungeon: { version: v0.0, adds: 入口の看板と最初の部屋 }
+    plannedMinutes: 72
+    askStage: void main と println まで。変数・if・for・配列・クラスはまだ
+    parts:
+      - { n: 1, title: ダンジョンの入口 }
+      - { n: 2, title: 壁を1行 }
+    allow:
+      keywords: [void]
+      apis: [System.out.println, System.out.print]
+    project: p00
+  - id: ch01
+    number: 1
+    title: 変数と計算
+    dungeon: { version: v0.1, adds: 勇者のステータス表示と HP バー }
+    plannedMinutes: 168
+    askStage: 変数・計算・文字列・printf・Scanner まで。if・for・配列・クラスはまだ
+    parts: []
+    allow:
+      keywords: [int, double, boolean, char, long, var, final, 'true', 'false', import, new]
+      apis:
+        - String
+        - String#length
+        - String#repeat
+        - String#toUpperCase
+        - String#toLowerCase
+        - String#formatted
+        - Math.max
+        - Math.min
+        - Math.abs
+        - Math.round
+        - System.out.printf
+        - Integer.parseInt
+        - new Scanner
+        - Scanner#nextInt
+        - Scanner#nextLine
+        - Scanner#next
+        - Scanner#nextDouble
+    project: p01
+  - id: ch02
+    number: 2
+    title: 条件とくりかえし
+    dungeon: { version: v0.2, adds: 床・壁・松明の部屋と、戦闘の勝ち負け }
+    plannedMinutes: 168
+    askStage: if・switch・for・while まで。配列・メソッドの宣言・クラスはまだ
+    parts: []
+    allow:
+      keywords: [if, else, switch, case, default, for, while, break, continue, '->', '?:']
+      apis: [String#equals, String#isEmpty]
+    project: p02
+  - id: ch03
+    number: 3
+    title: 配列とメソッド
+    dungeon: { version: v0.3, adds: 2次元配列のマップを勇者が歩き、壁で止まる }
+    plannedMinutes: 168
+    askStage: 配列・メソッドの宣言・StringBuilder まで。class・record・static の宣言、コレクション、例外処理、ラムダはまだ
+    parts: []
+    allow:
+      keywords: [return, '[]', '[][]', for-each]
+      apis:
+        - String#charAt
+        - String#toCharArray
+        - String#split
+        - String#substring
+        - String#indexOf
+        - String#contains
+        - String.valueOf
+        - new String
+        - Arrays.toString
+        - Arrays.fill
+        - Arrays.deepToString
+        - new StringBuilder
+        - StringBuilder#append
+        - StringBuilder#toString
+        - StringBuilder#length
+        - StringBuilder#reverse
+        - StringBuilder#setCharAt
+        - Character.isDigit
+        - Integer.toString
+    project: p03
+  - id: ch04
+    number: 4
+    title: クラスとオブジェクト
+    dungeon: { version: v0.4, adds: 勇者と魔物のクラスと、ターン制の戦闘ログ }
+    plannedMinutes: 168
+    askStage: class・record・static・public static void main まで。継承・インターフェース、コレクション、例外処理、ラムダはまだ
+    parts: []
+    allow:
+      keywords: [class, public, private, static, this, 'null', record, '@Override']
+      apis: [Object#equals, Object#toString]
+    project: p04
+  - id: ch05
+    number: 5
+    title: 継承とインターフェース
+    dungeon: { version: v0.5, adds: 動かない・追ってくる・巡回する魔物 }
+    plannedMinutes: 168
+    askStage: 継承・インターフェース・enum・sealed・パターンまで。コレクション、例外処理、ラムダはまだ
+    parts: []
+    allow:
+      keywords:
+        [
+          interface,
+          implements,
+          extends,
+          super,
+          abstract,
+          protected,
+          enum,
+          instanceof,
+          sealed,
+          permits,
+        ]
+      apis: [Integer.compare, Enum#name, Enum#ordinal, values]
+    project: p05
+  - id: ch06
+    number: 6
+    title: コレクション
+    dungeon: { version: v0.6, adds: アイテム・持ち物・魔物図鑑 }
+    plannedMinutes: 168
+    askStage: List・Map・Set・ArrayDeque まで。例外処理、ラムダ・Stream はまだ
+    parts: []
+    allow:
+      keywords: ['<>']
+      apis:
+        - List
+        - ArrayList
+        - List.of
+        - List#add
+        - List#get
+        - List#set
+        - List#remove
+        - List#size
+        - List#isEmpty
+        - List#contains
+        - List#indexOf
+        - List#clear
+        - Map
+        - TreeMap
+        - LinkedHashMap
+        - Map#put
+        - Map#get
+        - Map#getOrDefault
+        - Map#containsKey
+        - Map#remove
+        - Map#keySet
+        - Map#values
+        - Map#entrySet
+        - Map#size
+        - Map#merge
+        - Map.Entry#getKey
+        - Map.Entry#getValue
+        - Set
+        - TreeSet
+        - LinkedHashSet
+        - Set#add
+        - Set#contains
+        - Set#remove
+        - Set#size
+        - Collections.sort
+        - Collections.max
+        - Collections.min
+        - Integer
+        - Objects.equals
+        - Objects.hash
+        - ArrayDeque
+        - Deque#offer
+        - Deque#poll
+        - Deque#isEmpty
+    project: p06
+  - id: ch07
+    number: 7
+    title: 例外
+    dungeon: { version: v0.7, adds: セーブとロード（壊れた行を報告する） }
+    plannedMinutes: 156
+    askStage: try・catch・throw・独自の例外まで。ラムダ・Stream はまだ
+    parts: []
+    allow:
+      keywords: [try, catch, finally, throw, throws, try-with-resources]
+      apis:
+        - Exception
+        - RuntimeException
+        - IllegalArgumentException
+        - IllegalStateException
+        - NumberFormatException
+        - ArithmeticException
+        - ArrayIndexOutOfBoundsException
+        - AutoCloseable
+        - Object#getClass
+        - Class#getSimpleName
+    project: p07
+  - id: ch08
+    number: 8
+    title: ラムダと Stream
+    dungeon: { version: v0.8, adds: 冒険の記録のランキングと棒グラフ }
+    plannedMinutes: 168
+    askStage: ラムダ・メソッド参照・Comparator・Stream・Optional まで
+    parts: []
+    allow:
+      keywords: [lambda, '::']
+      apis:
+        - Function
+        - Predicate
+        - Consumer
+        - Supplier
+        - BiFunction
+        - Comparator.comparing
+        - Comparator.comparingInt
+        - Comparator#thenComparing
+        - Comparator#reversed
+        - List#sort
+        - List#forEach
+        - List#removeIf
+        - List#stream
+        - Stream#filter
+        - Stream#map
+        - Stream#mapToInt
+        - Stream#sorted
+        - Stream#limit
+        - Stream#skip
+        - Stream#count
+        - Stream#collect
+        - Stream#toList
+        - Stream#forEach
+        - Stream#anyMatch
+        - Stream#allMatch
+        - Stream#findFirst
+        - Stream#distinct
+        - IntStream.range
+        - IntStream.rangeClosed
+        - IntStream#sum
+        - IntStream#max
+        - Collectors.joining
+        - Collectors.groupingBy
+        - Collectors.counting
+        - Collectors.toList
+        - Collectors.summingInt
+        - Optional.of
+        - Optional.empty
+        - Optional.ofNullable
+        - Optional#isPresent
+        - Optional#orElse
+        - Optional#map
+        - Optional#ifPresent
+    project: p08
+  - id: ch09
+    number: 9
+    title: Spring Boot 入門
+    dungeon: { version: v1.0, adds: ランキング API と、ブラウザで遊べるダンジョン }
+    plannedMinutes: 312
+    askStage: Spring Boot の入門（RestController・Service・JUnit 5 のテスト1本）まで
+    parts: []
+    allow:
+      keywords: [annotation]
+      apis: []
+    project: p09

@@ -1,0 +1,144 @@
+# エラー図鑑（設計書 4-8）。MVP の12種。no は図鑑の番号（No.01）で、一度決めたら変えない。
+# match: コンパイルエラーは、メッセージの1行目に javacEn（teavm-javac・英語の JDK）と javacJa（日本語の JDK）を当てる。
+#        実行時は例外の完全な型名。kind: limit（時間切れ・出力の上限）は固定の ID で判定する
+# fixture: true の項目は errors-fixtures/<id>.java で、javac（英・日）と teavm-javac が判定に当たることを
+#          content-verify が確かめる
+- id: semicolon-expected
+  no: 1
+  name: ;忘れ
+  kind: compile
+  match:
+    javacEn: ["^';' expected$"]
+    javacJa: ["^';'がありません$"]
+  summary: 文の終わりの ; が無い
+  causes: [行の終わりに ; を書き忘れた, '前の行の ) が足りない']
+  fix: エラーの行か、その1つ前の行の終わりを見る
+  chapter: 0
+  fixture: true
+- id: cannot-find-symbol
+  no: 2
+  name: 名前ちがい
+  kind: compile
+  match:
+    javacEn: ['^cannot find symbol']
+    javacJa: ['^シンボルを見つけられません']
+  summary: その名前の変数・メソッド・クラスが見つからない
+  causes:
+    [名前のつづりや大文字・小文字がちがう, 宣言する前に使っている, '宣言した { } の外で使っている']
+  fix: エラーの名前と、宣言したところの名前を1文字ずつ見くらべる
+  chapter: 0
+  fixture: true
+- id: incompatible-types
+  no: 3
+  name: 型ちがい
+  kind: compile
+  match:
+    javacEn: ['^incompatible types']
+    javacJa: ['^不適合な型']
+  summary: 変数の型と、入れようとした値の型が合わない
+  causes: [文字列を int の変数に入れた, double の結果を int に入れた]
+  fix: 変数の型と、右側の値の型をそろえる（必要ならキャスト）
+  chapter: 1
+  fixture: true
+- id: uninitialized
+  no: 4
+  name: からっぽ変数
+  kind: compile
+  match:
+    javacEn: ['variable .+ might not have been initialized']
+    javacJa: ['変数.+は初期化されていない可能性があります']
+  summary: 値を入れる前の変数を使っている
+  causes: [宣言だけして値を入れ忘れた, if の中でしか値を入れていない]
+  fix: 宣言するときに最初の値を入れる
+  chapter: 1
+  fixture: true
+- id: unclosed-string
+  no: 5
+  name: 閉じない文字列
+  kind: compile
+  match:
+    javacEn: ['unclosed string literal']
+    javacJa: ['文字列リテラルが閉じられていません']
+  summary: 文字列の " が閉じていない
+  causes: [文字列の最後の " を書き忘れた, 文字列の中に " を書いた]
+  fix: 文字列の始まりと終わりの " を数える
+  chapter: 0
+  fixture: true
+- id: reached-eof
+  no: 6
+  name: 足りない }
+  kind: compile
+  match:
+    javacEn: ['reached end of file while parsing']
+    javacJa: ['構文解析中にファイルの終わりに移りました']
+  summary: '{ に対応する } が足りないまま、ファイルが終わった'
+  causes: ['} を書き忘れた', '{ と } の数が合っていない']
+  fix: '{ と } を1組ずつ数える'
+  chapter: 0
+  fixture: true
+- id: paren-expected
+  no: 7
+  name: 足りない )
+  kind: compile
+  match:
+    javacEn: ["^'\\)'( or ',')? expected"]
+    javacJa: ["^'\\)'(または',')?がありません"]
+  summary: ( に対応する ) が足りない
+  causes: [') を書き忘れた', '引数の区切りの , を書き忘れた']
+  fix: ( と ) を1組ずつ数える
+  chapter: 0
+  fixture: true
+- id: else-without-if
+  no: 8
+  name: ひとりぼっち else
+  kind: compile
+  match:
+    javacEn: ["'else' without 'if'"]
+    javacJa: ["'else'への'if'がありません"]
+  summary: else の前に、対応する if が無い
+  causes: [if の行の終わりに ; を書いた, 'if と else の間に { } の外の文がある']
+  fix: if の ( ) のあとに ; が無いか、{ } の組み方を見る
+  chapter: 2
+  fixture: true
+- id: already-defined
+  no: 9
+  name: 二重の名前
+  kind: compile
+  match:
+    javacEn: ['variable .+ is already defined']
+    javacJa: ['変数 .+はすでに.+で定義されています']
+  summary: 同じ名前の変数を2回宣言した
+  causes: [2回目も型を書いて宣言した, ループの中と外で同じ名前を宣言した]
+  fix: 2回目は型を書かずに代入だけにする
+  chapter: 1
+  fixture: true
+- id: arithmetic
+  no: 10
+  name: ゼロ割り
+  kind: runtime
+  match:
+    exception: [java.lang.ArithmeticException]
+  summary: 整数を 0 で割った
+  causes: [割る数の変数が 0 のままだった]
+  fix: 割る前に、割る数が 0 でないかを確かめる
+  chapter: 1
+  fixture: true
+- id: number-format
+  no: 11
+  name: 数字じゃない
+  kind: runtime
+  match:
+    exception: [java.lang.NumberFormatException, java.util.InputMismatchException]
+  summary: 数字ではない文字を、数として読もうとした
+  causes: [入力に数字以外の文字や空白が入っていた, 読む順番がずれて、文字を数として読んだ]
+  fix: 読もうとした文字と、入力の中身を見くらべる
+  chapter: 1
+  fixture: true
+- id: infinite-loop
+  no: 12
+  name: 終わらないループ
+  kind: limit
+  summary: 決まった時間をすぎても終わらなかった
+  causes: [ループの条件がずっと true のまま, ループの中で変数を変え忘れた]
+  fix: ループの条件と、ループの中で変わる変数を見る
+  chapter: 2

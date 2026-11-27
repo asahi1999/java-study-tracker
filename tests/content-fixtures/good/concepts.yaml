@@ -1,0 +1,2 @@
+- { id: println, name: println, chapter: 0, oneLine: 1行を出して改行する }
+- { id: print, name: print, chapter: 0, oneLine: 改行せずに出す }

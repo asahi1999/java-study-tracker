@@ -1,0 +1,10 @@
+# 宝箱のおみやげ（設計書 6-5。タイルの見た目の替えだけ。並んだ順に1つずつ渡す）。
+# sprite は src/components/tiles/sprites.svg の symbol（フェーズ4b で作る）
+- id: floor-moss
+  name: 苔の石畳
+  tile: floor
+  sprite: floor-moss
+- id: wall-brick
+  name: 赤れんがの壁
+  tile: wall
+  sprite: wall-brick
