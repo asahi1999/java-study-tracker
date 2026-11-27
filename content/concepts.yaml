@@ -91,3 +91,52 @@
   name: キャスト
   chapter: 1
   oneLine: (double) などで値の型を変える
+# 第2章
+- id: compare
+  name: 比べる記号
+  chapter: 2
+  oneLine: == や < で比べると true か false になる
+- id: if
+  name: if 文
+  chapter: 2
+  oneLine: 条件が true のときだけ動かす。false なら else
+- id: else-if
+  name: else if
+  chapter: 2
+  oneLine: 上から見て、最初に true になった1つだけ動く
+- id: logic
+  name: '&& と ||'
+  chapter: 2
+  oneLine: 「かつ」「または」で条件をつなぐ
+- id: switch
+  name: switch 式
+  chapter: 2
+  oneLine: 値ごとに結果を1つ選ぶ（case 値 -> 結果）
+- id: ternary
+  name: 三項演算子
+  chapter: 2
+  oneLine: '条件 ? A : B で2つから選ぶ'
+- id: string-equals
+  name: equals
+  chapter: 2
+  oneLine: 文字列が同じかは == ではなく equals で比べる
+- id: for
+  name: for 文
+  chapter: 2
+  oneLine: 決まった回数くりかえす
+- id: while
+  name: while 文
+  chapter: 2
+  oneLine: 条件が true のあいだくりかえす
+- id: nested-loop
+  name: 入れ子のループ
+  chapter: 2
+  oneLine: ループの中のループで、縦と横をくりかえす
+- id: break
+  name: break
+  chapter: 2
+  oneLine: ループをすぐ終わる
+- id: continue
+  name: continue
+  chapter: 2
+  oneLine: その回の残りを飛ばして、次の回へ進む
