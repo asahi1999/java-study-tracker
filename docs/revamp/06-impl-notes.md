@@ -61,3 +61,21 @@
 
 - `actions/setup-java@v6` の `java-version-file: java/JDK_VERSION`（最初の CI のログで Java の版を見る）
 - CI（ubuntu）で content-verify と `test:teavm` が時間内に終わるか（この Mac では content-verify の見本 16秒、壊した見本 30秒、`test:teavm` 全体 約50秒）
+
+## 教材担当（第1章）
+
+- 実施: 2026-11-27。説明カード4枚・小問11問（`reviewed: false`）。02-requirements.md 7-3 の12問のうち、Scanner を使う1問はフェーズ2に回した
+- 部品（`course.yaml` の `parts`）: 1 勇者の名前と HP／2 ダメージの計算／3 スライムとの戦い／4 HP バー／5 ステータス画面
+- おかわり（`optional: true`）: `ch01.modulo`・`ch01.bar-scale`
+- `double` は `println` で出さず、`printf` の `%.1f` だけで出した（`Double.toString` の一致がまだ未確認のため。02-requirements.md 8-3）
+- 第1章では `if` を使えないので、「最低でも 1」は `Math.max` で書かせた（`ch01.damage`）。バーの長さは `repeat` と整数の割り算で作る
+
+### Scanner でフェーズ2に回したもの（代わりの Scanner ができたら作る）
+
+| ID（予定）         | 種類      | 部品 | order | 中身                                                                                                                                                                                                                    |
+| ------------------ | --------- | ---- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ch01.scanner`     | card      | 5    | 160   | `new Scanner(System.in)`、`nextInt`・`nextLine`・`next`。コンパクトソースでは `import` が要らないこと（手元の `public class` では要る）。カードが5枚になる（要件は4枚）ので、`ch01.printf` にまとめるかはその時に決める |
+| `ch01.read-attack` | implement | 5    | 170   | 入力で攻撃力と相手の守りを受け取り、`Math.max(攻撃 - 守り, 1)` のダメージと残り HP を `printf`（`%s`・`%d`）で出す。ケース2つ（例: `7 3`・`2 9`）。02-requirements.md 7-3 の「入力を受けて表示」                        |
+
+- 入力の問題はケースが2つ以上になる。`Scanner` は `main` の中で作る（`static` にしない。02-requirements.md 8-3）
+- draw にはしない（`stdin` とケース1の入力をそろえる決まりがあり、入力で絵が変わる問題は第2章の部屋ジェネレーターで扱う）

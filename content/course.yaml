@@ -24,7 +24,12 @@ chapters:
     dungeon: { version: v0.1, adds: 勇者のステータス表示と HP バー }
     plannedMinutes: 168
     askStage: 変数・計算・文字列・printf・Scanner まで。if・for・配列・クラスはまだ
-    parts: []
+    parts:
+      - { n: 1, title: 勇者の名前と HP }
+      - { n: 2, title: ダメージの計算 }
+      - { n: 3, title: スライムとの戦い }
+      - { n: 4, title: HP バー }
+      - { n: 5, title: ステータス画面 }
     allow:
       keywords: [int, double, boolean, char, long, var, final, 'true', 'false', import, new]
       apis:

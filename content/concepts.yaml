@@ -33,3 +33,61 @@
   name: コンパイルエラー
   chapter: 0
   oneLine: 書き方の間違い。行の番号から読む
+
+# 第1章
+- id: variable
+  name: 変数
+  chapter: 1
+  oneLine: 値に名前を付けてしまう。型 名前 = 値;
+- id: types
+  name: 型
+  chapter: 1
+  oneLine: 値の種類。int・double・boolean・char・String
+- id: concat
+  name: 文字列の連結
+  chapter: 1
+  oneLine: + で文字列と値をつなぐ。左から順に計算する
+- id: arithmetic
+  name: 計算
+  chapter: 1
+  oneLine: + - * / で計算する。かけ算・割り算が先
+- id: int-division
+  name: 整数の割り算
+  chapter: 1
+  oneLine: int どうしの / は小数を切り捨てる
+- id: modulo
+  name: '%'
+  chapter: 1
+  oneLine: 割り算のあまり
+- id: compound-assign
+  name: += と ++
+  chapter: 1
+  oneLine: 今の値に足して入れ直す
+- id: math-max-min
+  name: Math.max・min・abs
+  chapter: 1
+  oneLine: 大きいほう・小さいほう・マイナスを取った値
+- id: length
+  name: length()
+  chapter: 1
+  oneLine: 文字列の文字の数
+- id: repeat
+  name: repeat
+  chapter: 1
+  oneLine: 文字列を決まった回数くりかえす
+- id: to-upper-case
+  name: toUpperCase
+  chapter: 1
+  oneLine: 英字を大文字にする
+- id: printf
+  name: printf
+  chapter: 1
+  oneLine: 書式（%s・%d・%.1f）に値をはめて出す
+- id: formatted
+  name: formatted
+  chapter: 1
+  oneLine: 書式に値をはめた文字列を作る
+- id: cast
+  name: キャスト
+  chapter: 1
+  oneLine: (double) などで値の型を変える
