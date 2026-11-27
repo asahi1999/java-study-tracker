@@ -15,6 +15,10 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "noEmit": true,
+    // scripts/ から Node で直接読む src のファイル（content/・domain/・runtime/java/core/）は、
+    // 型を取り除くだけで動く書き方にし、相対パスの import に .ts を付ける（設計書 2-2）
+    "erasableSyntaxOnly": true,
+    "allowImportingTsExtensions": true,
 
     "paths": {
       "@/*": ["./src/*"]

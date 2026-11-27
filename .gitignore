@@ -19,3 +19,8 @@ coverage
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+# 教材の生成物（content-build）と検証のキャッシュ（content-verify）
+src/content/generated
+public/java/manifest.json
+.cache

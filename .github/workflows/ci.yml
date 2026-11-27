@@ -36,6 +36,9 @@ jobs:
       - name: 整形の確認
         run: npm run format:check
 
+      - name: teavm-javac の同梱ファイルの照合（SHA256SUMS）
+        run: npm run teavm:verify
+
       - name: 型チェック
         run: npm run typecheck
 

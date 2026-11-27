@@ -1,3 +1,8 @@
 dist
 coverage
 package-lock.json
+# teavm-javac の配布物（直さずに使う）と、content-build の出力
+public/java/**/*.js
+public/java/manifest.json
+src/content/generated
+.cache

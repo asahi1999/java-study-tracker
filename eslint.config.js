@@ -7,7 +7,16 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
-  globalIgnores(['dist', 'coverage']),
+  // public/java は teavm-javac の配布物（直さずに使う）。src/content/generated は content-build の出力
+  globalIgnores([
+    'dist',
+    'coverage',
+    'public/java',
+    'src/content/generated',
+    '.cache',
+    // デザインのモック（ブラウザで直接開く見本。アプリのコードではない）
+    'docs/revamp/mockups',
+  ]),
 
   // すべてのファイルに共通のルール
   {
@@ -32,9 +41,9 @@ export default defineConfig([
     },
   },
 
-  // 設定ファイル（Node.js で動くコード）
+  // 設定ファイルとスクリプト（Node.js で動くコード）
   {
-    files: ['*.config.{js,ts}'],
+    files: ['*.config.{js,ts}', 'scripts/**/*.ts'],
     extends: [tseslint.configs.recommended],
     languageOptions: {
       globals: globals.node,
