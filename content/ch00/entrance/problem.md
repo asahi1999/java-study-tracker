@@ -10,7 +10,7 @@ concepts: [main, println]
 minutes: 1
 source: compact
 render: tiles
-reviewed: false
+reviewed: true
 ---
 
 ## 説明

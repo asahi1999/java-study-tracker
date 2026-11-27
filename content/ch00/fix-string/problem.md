@@ -4,7 +4,7 @@ rev: 1
 type: fix
 title: 閉じない看板
 chapter: 0
-part: 3
+part: 4
 order: 110
 concepts: [string, compile-error]
 minutes: 2
@@ -18,7 +18,7 @@ judge:
 expectError:
   kind: compile
   dex: unclosed-string
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

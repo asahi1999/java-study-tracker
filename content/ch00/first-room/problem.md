@@ -4,7 +4,7 @@ rev: 1
 type: draw
 title: 最初の部屋
 chapter: 0
-part: 2
+part: 3
 order: 70
 concepts: [println]
 minutes: 3
@@ -15,7 +15,7 @@ judge:
   mode: output
   cases:
     - name: 部屋
-reviewed: false
+reviewed: true
 ---
 
 ## 問題
@@ -30,7 +30,7 @@ reviewed: false
 #######
 ```
 
-薄く見えている形に、自分の部屋を重ねる。
+薄く出ている目標の絵と、自分の絵を見くらべる。
 
 ## ヒント1
 

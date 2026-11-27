@@ -4,7 +4,7 @@ rev: 1
 type: draw
 title: 松明を置く
 chapter: 0
-part: 2
+part: 3
 order: 80
 concepts: [println, string]
 minutes: 2
@@ -16,7 +16,7 @@ judge:
   mode: output
   cases:
     - name: 松明の部屋
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

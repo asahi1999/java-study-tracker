@@ -14,8 +14,8 @@ inputMode: choice
 choices:
   - "#####\n#.@.#\n#####\n"
   - "#####\n#*.*#\n#.@.#\n#####\n"
-  - "#####\n#.@.#\n#####\n#*.*#\n"
-reviewed: false
+  - "#####\n"
+reviewed: true
 ---
 
 ## 問題

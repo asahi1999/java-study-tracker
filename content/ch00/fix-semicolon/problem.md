@@ -4,7 +4,7 @@ rev: 1
 type: fix
 title: 消えた ; を直す
 chapter: 0
-part: 3
+part: 4
 order: 100
 concepts: [semicolon, compile-error]
 minutes: 2
@@ -18,7 +18,7 @@ judge:
 expectError:
   kind: compile
   dex: semicolon-expected
-reviewed: false
+reviewed: true
 ---
 
 ## 問題

@@ -11,8 +11,9 @@ chapters:
     askStage: void main と println まで。変数・if・for・配列・クラスはまだ
     parts:
       - { n: 1, title: ダンジョンの入口 }
-      - { n: 2, title: 最初の部屋 }
-      - { n: 3, title: 壊れた入口の修理 }
+      - { n: 2, title: 出る行を読む }
+      - { n: 3, title: 最初の部屋 }
+      - { n: 4, title: 壊れた入口の修理 }
     allow:
       keywords: [void]
       apis: [System.out.println, System.out.print]

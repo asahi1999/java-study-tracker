@@ -10,7 +10,7 @@ concepts: [print, comment]
 minutes: 1
 source: compact
 render: tiles
-reviewed: false
+reviewed: true
 ---
 
 ## 説明
@@ -22,4 +22,4 @@ reviewed: false
 
 `//` から行の終わりまでは「コメント」。メモ書きで、実行されない。
 
-下のコードでは、1行目の `#.@` を `print` 3回で作っている。`( )` の中が空の `System.out.println()` は、改行だけをする。
+下のコードでは、出力の1行目の `#.@` を `print` 3回で作っている。`( )` の中が空の `System.out.println()` は、改行だけをする。

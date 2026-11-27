@@ -4,11 +4,11 @@ rev: 1
 type: card
 title: エラーは行番号から
 chapter: 0
-part: 3
+part: 4
 order: 90
 concepts: [compile-error, semicolon]
 minutes: 1
-reviewed: false
+reviewed: true
 ---
 
 ## 説明
