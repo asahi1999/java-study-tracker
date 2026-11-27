@@ -1,0 +1,148 @@
+{
+  "description": "判定の行の読み取り（03-design.md 5-4）。expect.stages は [段階, 通った数, 全部の数]、step は [今の問題 ID, rev, 結果]",
+  "cases": [
+    {
+      "name": "改行なしの出力のあとに判定の行",
+      "input": "###\n\u001e@@jq {\"t\":\"hello\",\"v\":2,\"step\":\"ch00.sign\",\"rev\":1,\"source\":\"compact\"}\n\n\u001e@@jq {\"t\":\"case\",\"stage\":0,\"i\":0,\"name\":\"\\u305d\\u306e\\u307e\\u307e\\u5b9f\\u884c\",\"ok\":null,\"actual\":\"###\",\"error\":null}\n\n\u001e@@jq {\"t\":\"case\",\"stage\":1,\"i\":1,\"name\":\"\\u770b\\u677f\",\"ok\":true,\"actual\":\"###\",\"error\":null}\n\n\u001e@@jq {\"t\":\"stage\",\"stage\":1,\"passed\":1,\"total\":1}\n\n\u001e@@jq {\"t\":\"done\",\"step\":\"ch00.sign\",\"rev\":1,\"passed\":1,\"total\":1}\n",
+      "expect": {
+        "events": 5,
+        "text": "###",
+        "passed": true,
+        "limit": false,
+        "doneTotal": 1,
+        "stages": [[1, 1, 1]],
+        "step": ["ch00.sign", 1, "same"]
+      }
+    },
+    {
+      "name": "学習者の標準エラーは残す",
+      "input": "warn\n\n\u001e@@jq {\"t\":\"hello\",\"v\":2,\"step\":\"ch00.sign\",\"rev\":1,\"source\":\"compact\"}\noops\n\u001e@@jq {\"t\":\"case\",\"stage\":0,\"i\":0,\"name\":\"\\u305d\\u306e\\u307e\\u307e\\u5b9f\\u884c\",\"ok\":null,\"actual\":\"###\",\"error\":null}\n\n\u001e@@jq {\"t\":\"done\",\"step\":\"ch00.sign\",\"rev\":1,\"passed\":0,\"total\":0}\n",
+      "expect": {
+        "events": 3,
+        "text": "warn\noops",
+        "passed": false,
+        "limit": false,
+        "doneTotal": 0,
+        "stages": [],
+        "step": ["ch00.sign", 1, "same"]
+      }
+    },
+    {
+      "name": "別の問題の出力",
+      "input": "\n\u001e@@jq {\"t\":\"hello\",\"v\":2,\"step\":\"ch00.other\",\"rev\":1,\"source\":\"compact\"}\n\n\u001e@@jq {\"t\":\"done\",\"step\":\"ch00.other\",\"rev\":1,\"passed\":1,\"total\":1}\n",
+      "expect": {
+        "events": 2,
+        "text": "",
+        "passed": true,
+        "limit": false,
+        "doneTotal": 1,
+        "stages": [],
+        "step": ["ch00.sign", 1, "other-step"]
+      }
+    },
+    {
+      "name": "rev だけ違う",
+      "input": "\n\u001e@@jq {\"t\":\"hello\",\"v\":2,\"step\":\"ch00.sign\",\"rev\":1,\"source\":\"compact\"}\n\n\u001e@@jq {\"t\":\"done\",\"step\":\"ch00.sign\",\"rev\":2,\"passed\":1,\"total\":1}\n",
+      "expect": {
+        "events": 2,
+        "text": "",
+        "passed": true,
+        "limit": false,
+        "doneTotal": 1,
+        "stages": [],
+        "step": ["ch00.sign", 1, "old-rev"]
+      }
+    },
+    {
+      "name": "total = 0 は合格にしない",
+      "input": "\n\u001e@@jq {\"t\":\"hello\",\"v\":2,\"step\":\"ch00.sign\",\"rev\":1,\"source\":\"compact\"}\n\n\u001e@@jq {\"t\":\"case\",\"stage\":0,\"i\":0,\"name\":\"\\u305d\\u306e\\u307e\\u307e\\u5b9f\\u884c\",\"ok\":null,\"actual\":\"###\",\"error\":null}\n\n\u001e@@jq {\"t\":\"stage\",\"stage\":1,\"passed\":0,\"total\":0}\n\n\u001e@@jq {\"t\":\"done\",\"step\":\"ch00.sign\",\"rev\":1,\"passed\":0,\"total\":0}\n",
+      "expect": {
+        "events": 4,
+        "text": "",
+        "passed": false,
+        "limit": false,
+        "doneTotal": 0,
+        "stages": [[1, 0, 0]],
+        "step": ["ch00.sign", 1, "same"]
+      }
+    },
+    {
+      "name": "U+001E なし（手元で貼った出力）",
+      "input": "###\n@@jq {\"t\": \"hello\", \"v\": 2, \"step\": \"ch00.sign\", \"rev\": 1, \"source\": \"compact\"}\n@@jq {\"t\": \"case\", \"stage\": 1, \"i\": 2, \"name\": \"空\", \"ok\": false, \"expected\": \"#\", \"actual\": \"\", \"error\": {\"type\": \"java.lang.ArithmeticException\", \"line\": 3, \"file\": \"Main.java\"}}\n@@jq {\"t\": \"stage\", \"stage\": 1, \"passed\": 0, \"total\": 1}\n@@jq {\"t\": \"done\", \"step\": \"ch00.sign\", \"rev\": 1, \"passed\": 0, \"total\": 1}\n",
+      "expect": {
+        "events": 4,
+        "text": "###",
+        "passed": false,
+        "limit": false,
+        "doneTotal": 1,
+        "stages": [[1, 0, 1]],
+        "step": ["ch00.sign", 1, "same"]
+      }
+    },
+    {
+      "name": "出力の上限",
+      "input": "##########\n\u001e@@jq {\"t\":\"hello\",\"v\":2,\"step\":\"ch00.sign\",\"rev\":1,\"source\":\"compact\"}\n\n\u001e@@jq {\"t\":\"case\",\"stage\":0,\"i\":0,\"name\":\"\\u305d\\u306e\\u307e\\u307e\\u5b9f\\u884c\",\"ok\":null,\"actual\":\"###\",\"error\":null}\n\n\u001e@@jq {\"t\":\"limit\",\"reason\":\"output\"}\n",
+      "expect": {
+        "events": 3,
+        "text": "##########",
+        "passed": false,
+        "limit": true,
+        "doneTotal": null,
+        "stages": [],
+        "step": ["ch00.sign", 1, "same"]
+      }
+    },
+    {
+      "name": "途中で止まった段階は来たケースから数える",
+      "input": "\n\u001e@@jq {\"t\":\"hello\",\"v\":2,\"step\":\"ch00.sign\",\"rev\":1,\"source\":\"compact\"}\n\n\u001e@@jq {\"t\":\"case\",\"stage\":1,\"i\":1,\"name\":\"\\u770b\\u677f\",\"ok\":true,\"actual\":\"###\",\"error\":null}\n\n\u001e@@jq {\"t\":\"case\",\"stage\":1,\"i\":2,\"name\":\"\\u7a7a\",\"ok\":false,\"expected\":\"#\",\"actual\":\"\",\"error\":{\"type\":\"java.lang.ArithmeticException\",\"line\":3,\"file\":\"Main.java\"}}\n",
+      "expect": {
+        "events": 3,
+        "text": "",
+        "passed": false,
+        "limit": false,
+        "doneTotal": null,
+        "stages": [[1, 1, 2]],
+        "step": ["ch00.sign", 1, "same"]
+      }
+    },
+    {
+      "name": "知らない t と壊れた JSON は無視",
+      "input": "\n\u001e@@jq {\"t\":\"hello\",\"v\":2,\"step\":\"ch00.sign\",\"rev\":1,\"source\":\"compact\"}\n\n\u001e@@jq {\"t\":\"frame\",\"n\":1}\n\n@@jq {broken\n\n\u001e@@jq {\"t\":\"done\",\"step\":\"ch00.sign\",\"rev\":1,\"passed\":1,\"total\":1}\n",
+      "expect": {
+        "events": 2,
+        "text": "",
+        "passed": true,
+        "limit": false,
+        "doneTotal": 1,
+        "stages": [],
+        "step": ["ch00.sign", 1, "same"]
+      }
+    },
+    {
+      "name": "CRLF の行",
+      "input": "a\r\n\r\n\u001e@@jq {\"t\": \"done\", \"step\": \"ch00.sign\", \"rev\": 1, \"passed\": 1, \"total\": 1}\r\n",
+      "expect": {
+        "events": 1,
+        "text": "a\r\n",
+        "passed": true,
+        "limit": false,
+        "doneTotal": 1,
+        "stages": [],
+        "step": ["ch00.sign", 1, "same"]
+      }
+    },
+    {
+      "name": "判定の行が無い",
+      "input": "Main.java:3: error: ';' expected\n",
+      "expect": {
+        "events": 0,
+        "text": "Main.java:3: error: ';' expected\n",
+        "passed": false,
+        "limit": false,
+        "doneTotal": null,
+        "stages": [],
+        "step": ["ch00.sign", 1, "unknown"]
+      }
+    }
+  ]
+}

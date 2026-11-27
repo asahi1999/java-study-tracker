@@ -24,6 +24,8 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./tests/setup.ts'],
+    // 本物の teavm-javac と JDK を使うテストは npm run test:teavm（vitest.teavm.config.ts）で動かす
+    exclude: ['**/node_modules/**', '**/dist/**', '**/*.teavm.test.ts'],
     // 1件のテストの上限時間。初期値の5秒では、ほかの処理でパソコンが忙しいときに、
     // IndexedDB を使う画面のテストが時間切れで失敗することがあった（負荷を3倍にすると1件で最大14秒）。
     // 画面の更新を待つ上限（tests/setup.ts の asyncUtilTimeout）より十分長くし、

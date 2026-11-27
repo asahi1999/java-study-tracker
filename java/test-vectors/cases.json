@@ -1,0 +1,70 @@
+{
+  "description": "JqCases の生成（03-design.md 5-5）。value を Java の文字列リテラルにすると javaLiteral になり、Java で読むと value に戻る",
+  "strings": [
+    {
+      "name": "空",
+      "value": "",
+      "javaLiteral": "\"\""
+    },
+    {
+      "name": "ASCII",
+      "value": "hello",
+      "javaLiteral": "\"hello\""
+    },
+    {
+      "name": "日本語",
+      "value": "勇者のHP",
+      "javaLiteral": "\"勇者のHP\""
+    },
+    {
+      "name": "改行",
+      "value": "a\nb\n",
+      "javaLiteral": "\"a\\nb\\n\""
+    },
+    {
+      "name": "CRLF",
+      "value": "a\r\nb",
+      "javaLiteral": "\"a\\r\\nb\""
+    },
+    {
+      "name": "引用符",
+      "value": "say \"hi\"",
+      "javaLiteral": "\"say \\\"hi\\\"\""
+    },
+    {
+      "name": "バックスラッシュ",
+      "value": "C:\\temp\\new",
+      "javaLiteral": "\"C:\\\\temp\\\\new\""
+    },
+    {
+      "name": "\\u に見える文字",
+      "value": "\\u000a と \\\\u0041",
+      "javaLiteral": "\"\\\\u000a と \\\\\\\\u0041\""
+    },
+    {
+      "name": "タブ",
+      "value": "a\tb",
+      "javaLiteral": "\"a\\tb\""
+    },
+    {
+      "name": "制御文字",
+      "value": "\u0000\u0001\u001e",
+      "javaLiteral": "\"\\000\\001\\036\\177\""
+    },
+    {
+      "name": "絵文字",
+      "value": "宝箱😀",
+      "javaLiteral": "\"宝箱😀\""
+    },
+    {
+      "name": "全角の空白と記号",
+      "value": "　＃＠．",
+      "javaLiteral": "\"　＃＠．\""
+    },
+    {
+      "name": "U+2028",
+      "value": "a b",
+      "javaLiteral": "\"a b\""
+    }
+  ]
+}

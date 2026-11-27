@@ -1,0 +1,104 @@
+{
+  "description": "外枠（03-design.md 4-5）。input を包むと output になる。positions は包んだあとの [行, 列] と元の [行, 列]（1始まり）",
+  "cases": [
+    {
+      "name": "import なし",
+      "input": "void main() {\n    System.out.println(\"hi\");\n}\n",
+      "output": "import module java.base; final class Main { void main() {\n    System.out.println(\"hi\");\n}\n\n}",
+      "positions": [
+        {
+          "wrapped": [1, 45],
+          "learner": [1, 1]
+        },
+        {
+          "wrapped": [2, 29],
+          "learner": [2, 29]
+        },
+        {
+          "wrapped": [1, 5],
+          "learner": [1, 1]
+        }
+      ]
+    },
+    {
+      "name": "import あり",
+      "input": "import java.util.List;\n\nvoid main() {\n    System.out.println(List.of(1));\n}\n",
+      "output": "import module java.base; import java.util.List; final class Main {\n\nvoid main() {\n    System.out.println(List.of(1));\n}\n\n}",
+      "positions": [
+        {
+          "wrapped": [1, 26],
+          "learner": [1, 1]
+        },
+        {
+          "wrapped": [1, 47],
+          "learner": [1, 22]
+        },
+        {
+          "wrapped": [1, 48],
+          "learner": [1, 23]
+        },
+        {
+          "wrapped": [4, 5],
+          "learner": [4, 5]
+        }
+      ]
+    },
+    {
+      "name": "コメントの中の import",
+      "input": "// import java.util.List;\nvoid main() {\n    System.out.println(\"x\");\n}\n",
+      "output": "import module java.base; final class Main { // import java.util.List;\nvoid main() {\n    System.out.println(\"x\");\n}\n\n}",
+      "positions": [
+        {
+          "wrapped": [2, 6],
+          "learner": [2, 6]
+        }
+      ]
+    },
+    {
+      "name": "テキストブロックの中の import",
+      "input": "void main() {\n    String s = \"\"\"\n        import java.util.List;\n        \"\"\";\n    System.out.print(s);\n}\n",
+      "output": "import module java.base; final class Main { void main() {\n    String s = \"\"\"\n        import java.util.List;\n        \"\"\";\n    System.out.print(s);\n}\n\n}",
+      "positions": []
+    },
+    {
+      "name": "import が2つ、文字列の中の import",
+      "input": "import java.util.List;\nimport java.util.Map; // 最後の import\nvoid main() {\n    System.out.println(\"import java.util.Set;\");\n}\n",
+      "output": "import module java.base; import java.util.List;\nimport java.util.Map; final class Main { // 最後の import\nvoid main() {\n    System.out.println(\"import java.util.Set;\");\n}\n\n}",
+      "positions": [
+        {
+          "wrapped": [2, 22],
+          "learner": [2, 22]
+        },
+        {
+          "wrapped": [2, 41],
+          "learner": [2, 22]
+        },
+        {
+          "wrapped": [2, 42],
+          "learner": [2, 23]
+        },
+        {
+          "wrapped": [1, 26],
+          "learner": [1, 1]
+        }
+      ]
+    },
+    {
+      "name": "ブロックコメントの中の import",
+      "input": "import java.util.List; /* import java.util.Map; */\nvoid main() {\n    System.out.println(List.of());\n}\n",
+      "output": "import module java.base; import java.util.List; final class Main { /* import java.util.Map; */\nvoid main() {\n    System.out.println(List.of());\n}\n\n}",
+      "positions": [
+        {
+          "wrapped": [1, 67],
+          "learner": [1, 23]
+        }
+      ]
+    },
+    {
+      "name": "文字リテラルの引用符・末尾に改行なし",
+      "input": "void main() {\n    char c = '\"';\n    System.out.println(c + \"import x;\");\n}",
+      "output": "import module java.base; final class Main { void main() {\n    char c = '\"';\n    System.out.println(c + \"import x;\");\n}\n}",
+      "positions": []
+    }
+  ]
+}
